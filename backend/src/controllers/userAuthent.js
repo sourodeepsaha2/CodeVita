@@ -18,7 +18,7 @@ const register = async(req,res)=>{
         res.status(201).send("User Registered Sucessfully");
     }
     catch(err){
-        res.status(400).send("Error: "+err);
+        res.status(401).send("Error: "+err);
     }
 } 
 
