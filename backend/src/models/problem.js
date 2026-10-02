@@ -48,8 +48,21 @@ const problemSchema = new Schema({
             }
         }
     ],
-    starterCode:[
+    startCode:[
         {
+            language:{
+                type:String,
+                required:true
+            },
+            completeCode:{
+                type:String,
+                required:true
+            }
+        }
+    ],
+
+    referenceSolution :[
+         {
             language:{
                 type:String,
                 required:true
