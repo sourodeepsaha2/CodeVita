@@ -4,11 +4,11 @@ const problemRouter = express.Router();
 
 
 
-problemRouter.post("/create",problemCreate);
-problemRouter.get("/:id",problemFetch);
-problemRouter.get("/",problemFetchAll);
+problemRouter.post("/create",createProblem);
+problemRouter.get("/:id",updateProblem);
+problemRouter.get("/",deleteProblem);
 
-problemRouter.patch("/:id",problemUpdate);
+problemRouter.patch("/:id",getProblembyId);
 problemRouter.delete("/:id",problemDelete);
-problemRouter.get("/user", solvedProblem);
+problemRouter.get("/user", solvedProblembyUser);
 
