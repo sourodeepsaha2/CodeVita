@@ -6,7 +6,7 @@ const adminMiddleware = require("../middleware/adminMiddleware");
 
 
 problemRouter.post("/create",adminMiddleware,createProblem);
-problemRouter.get("/:id",updateProblem);
+problemRouter.get("/:id",Problem);
 problemRouter.get("/",deleteProblem);
 
 problemRouter.patch("/:id",getProblembyId);
