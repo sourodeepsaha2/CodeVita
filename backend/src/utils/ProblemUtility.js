@@ -14,8 +14,6 @@ const getlanguageById = (lang)=>{
 
 const submitBatch = async (submissions)=>{
 
-   
-
 const options = {
   method: 'POST',
   url: 'https://judge0-ce.p.rapidapi.com/submissions/batch',
@@ -35,13 +33,13 @@ const options = {
 async function fetchData() {
 	try {
 		const response = await axios.request(options);
-		console.log(response.data);
+		return response.data;
 	} catch (error) {
 		console.error(error);
 	}
 }
 
-fetchData();
+return await fetchData();
 
 }
 
