@@ -32,7 +32,7 @@ const options = {
 
 async function fetchData() {
 	try {
-		const response = await axios.request(options);
+		const response = await axios.request();
 		return response.data;
 	} catch (error) {
 		console.error(error);
