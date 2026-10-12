@@ -24,6 +24,10 @@ const createProblem = async (req,res)=>{
             }));
 
             const submitResult = await submitBatch(submission);
+
+            const resultToken = submitResult.map((value)=>value.token); // an array of token
+
+            const testResult = await submitToken(resultToken);
         }
     }
     catch(err){
