@@ -18,7 +18,7 @@ const options = {
   method: 'POST',
   url: 'https://judge0-ce.p.rapidapi.com/submissions/batch',
   params: {
-    base64_encoded: 'true'
+    base64_encoded: 'false'
   },
   headers: {
     'x-rapidapi-key': '96e7da6d50mshc96203a678fb557p19c090jsn5e1cc3ef8f0c',
@@ -55,7 +55,7 @@ const submitToken = async(resultToken)=>{
   url: 'https://judge0-ce.p.rapidapi.com/submissions/batch',
   params: {
     tokens: resultToken.join(","),
-    base64_encoded: 'true'
+    base64_encoded: 'false'
   },
   headers: {
     'x-rapidapi-key': '96e7da6d50mshc96203a678fb557p19c090jsn5e1cc3ef8f0c',
