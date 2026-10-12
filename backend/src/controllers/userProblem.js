@@ -49,3 +49,5 @@ const createProblem = async (req,res)=>{
 
     }
 }
+
+module.exports = createProblem;
