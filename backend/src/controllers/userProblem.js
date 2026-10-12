@@ -1,5 +1,5 @@
-const {getLanguageById,submitBatch} = require("../utils/ProblemUtility");
-
+const {getLanguageById,submitBatch,submitToken} = require("../utils/ProblemUtility");
+const Problem = require("../models/problem")
 
 const createProblem = async (req,res)=>{
     const {title,description,difficulty,tags,visibleTestCases,hiddenTestCases,startCode,referenceSolution,problemCreator} = req.body;
@@ -28,9 +28,24 @@ const createProblem = async (req,res)=>{
             const resultToken = submitResult.map((value)=>value.token); // an array of token
 
             const testResult = await submitToken(resultToken);
+
+            for(const test of testResult){
+                if(test.status_id!=3){
+                   return res.status(400).send("Error Occured");
+                }
+            }
         }
+        // We can store it in DB
+
+        const userProblem = await Problem.create({
+            ...req.body,
+            problemCreator: req.result._id
+        });
+
+        res.status(201).send("Problem Saved Successfully");
     }
     catch(err){
+        res.status(400).send("Error: "+err);
 
     }
 }
