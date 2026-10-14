@@ -50,4 +50,8 @@ const createProblem = async (req,res)=>{
     }
 }
 
-module.exports = createProblem;
+const updateProblem = async(req,res)=>{
+    
+}
+
+module.exports = {createProblem,updateProblem};
