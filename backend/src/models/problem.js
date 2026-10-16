@@ -54,7 +54,7 @@ const problemSchema = new Schema({
                 type:String,
                 required:true
             },
-            completeCode:{
+            CompleteCode:{
                 type:String,
                 required:true
             }
