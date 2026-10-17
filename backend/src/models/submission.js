@@ -6,12 +6,12 @@ const submissionSchema = new Schema({
 
     userId:{
         type:Schema.Types.ObjectId,
-        ref:'User',
+        ref:'user',
         required: true
     },
     problemId:{
         type:Schema.Types.ObjectId,
-        ref:'Problem',
+        ref:'problem',
         required:true
     },
     code:{
@@ -21,7 +21,7 @@ const submissionSchema = new Schema({
     language:{
         type:String,
         required:true,
-        enum:['javascript','cpp','java',]
+        enum:['javascript','c++','java',]
     },
     status:{
         type:String,
