@@ -160,4 +160,17 @@ const getAllProblem = async(req,res)=>{
     }
 }
 
+const solvedAllProblembyUser = async(req,res)=>{
+
+    try{
+
+        const count = req.result.problemSolved.length;
+
+        res.status(200).send(count);
+    }
+    catch(err){
+        res.status(500).send("Server Error");
+    }
+}
+
 module.exports = {createProblem,updateProblem,deleteProblem,getProblembyId,getAllProblem};
