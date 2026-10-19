@@ -179,4 +179,13 @@ const solvedAllProblembyUser = async(req,res)=>{
     }
 }
 
+const submittedProblem = async(req,res)=>{
+    try{
+        
+    }
+    catch(err){
+
+    }
+}
+
 module.exports = {createProblem,updateProblem,deleteProblem,getProblembyId,getAllProblem};
