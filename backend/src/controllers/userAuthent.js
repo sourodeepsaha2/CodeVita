@@ -101,4 +101,4 @@ const deleteProfile = async(req,res)=>{
     }
 }
 
-module.exports = {register, login, logout,adminRegister}
+module.exports = {register, login, logout,adminRegister,deleteProfile}
