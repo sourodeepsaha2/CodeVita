@@ -1,11 +1,20 @@
+import { Routes, Route } from "react-router";
+import Navbar from "./components/Navbar";
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
 
-function App(){
-
-  return(
+function App() {
+  return (
     <>
-    Hello coder army
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+      </Routes>
     </>
-  )
+  );
 }
 
 export default App;
