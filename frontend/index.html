@@ -6,6 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Code Vita – Master DSA & Competitive Programming</title>
     <meta name="description" content="Code Vita is a competitive programming platform to practice DSA, solve algorithmic challenges, and ace technical interviews. Join thousands of coders today." />
+    <script>
+      // Apply the saved theme before first paint to avoid a flash of the wrong theme.
+      (function () {
+        var theme = "dark";
+        try {
+          theme = localStorage.getItem("cv-theme") || "dark";
+        } catch (e) {}
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
