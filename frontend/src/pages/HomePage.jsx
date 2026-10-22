@@ -1,5 +1,8 @@
 import { Link } from "react-router";
 import { useState, useEffect, useRef } from "react";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
+
+const CURRENT_YEAR = new Date().getFullYear();
 
 /* ─── Animated Counter ─── */
 function AnimatedCounter({ target, suffix = "", duration = 2000 }) {
@@ -47,31 +50,14 @@ function ProblemRow({ num, title, difficulty, tags, acceptance }) {
   const c = diffColors[difficulty];
 
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "16px",
-        padding: "14px 20px",
-        borderRadius: "10px",
-        transition: "all 0.25s",
-        cursor: "pointer",
-        borderBottom: "1px solid rgba(139,92,246,0.06)",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.background = "rgba(139,92,246,0.06)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.background = "transparent";
-      }}
-    >
+    <div className="problem-row">
       <span style={{ color: "var(--cv-text-muted)", fontFamily: "var(--font-mono)", fontSize: "0.85rem", minWidth: "36px" }}>
         {num}
       </span>
       <span style={{ flex: 1, fontWeight: "500", fontSize: "0.92rem" }}>{title}</span>
       <span style={{ display: "flex", gap: "6px" }}>
         {tags.map((t) => (
-          <span key={t} style={{ padding: "3px 9px", borderRadius: "6px", fontSize: "0.75rem", background: "rgba(139,92,246,0.1)", color: "#a78bfa", border: "1px solid rgba(139,92,246,0.2)" }}>
+          <span key={t} style={{ padding: "3px 9px", borderRadius: "6px", fontSize: "0.75rem", background: "rgba(139,92,246,0.1)", color: "var(--cv-accent-text)", border: "1px solid rgba(139,92,246,0.2)" }}>
             {t}
           </span>
         ))}
@@ -177,6 +163,8 @@ function CodeSnippet() {
 
 /* ─── Home Page ─── */
 export default function HomePage() {
+  useDocumentTitle();
+
   const problems = [
     { num: "001", title: "Two Sum", difficulty: "Easy", tags: ["Array", "Hash Map"], acceptance: 49 },
     { num: "053", title: "Maximum Subarray", difficulty: "Medium", tags: ["Array", "DP"], acceptance: 50 },
@@ -293,7 +281,7 @@ export default function HomePage() {
                 marginBottom: "28px",
                 fontSize: "0.82rem",
                 fontWeight: "600",
-                color: "#a78bfa",
+                color: "var(--cv-accent-text)",
                 letterSpacing: "0.05em",
                 textTransform: "uppercase",
               }}
@@ -315,7 +303,7 @@ export default function HomePage() {
 
             <p
               className="animate-fade-in-up delay-200"
-              style={{ fontSize: "1.1rem", color: "#94a3b8", lineHeight: 1.7, marginBottom: "36px", maxWidth: "520px", opacity: 0 }}
+              style={{ fontSize: "1.1rem", color: "var(--cv-text-2)", lineHeight: 1.7, marginBottom: "36px", maxWidth: "520px", opacity: 0 }}
             >
               Code Vita is your all-in-one competitive programming arena. Practice
               2400+ curated problems, compete in weekly contests, and ace interviews
@@ -342,7 +330,7 @@ export default function HomePage() {
                 { label: "Companies", val: "50+" },
               ].map((s) => (
                 <div key={s.label}>
-                  <div style={{ fontSize: "1.5rem", fontWeight: "800", color: "#a78bfa", fontFamily: "var(--font-mono)" }}>
+                  <div style={{ fontSize: "1.5rem", fontWeight: "800", color: "var(--cv-accent-text)", fontFamily: "var(--font-mono)" }}>
                     {s.val}
                   </div>
                   <div style={{ fontSize: "0.82rem", color: "var(--cv-text-muted)", marginTop: "2px" }}>{s.label}</div>
@@ -395,7 +383,7 @@ export default function HomePage() {
       </section>
 
       {/* ─── Stats Section ─── */}
-      <section style={{ padding: "80px 24px", borderTop: "1px solid rgba(139,92,246,0.08)", borderBottom: "1px solid rgba(139,92,246,0.08)", background: "rgba(17,17,24,0.5)" }}>
+      <section style={{ padding: "80px 24px", borderTop: "1px solid rgba(139,92,246,0.08)", borderBottom: "1px solid rgba(139,92,246,0.08)", background: "var(--cv-section-alt)" }}>
         <div style={{ maxWidth: "1000px", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "24px" }}>
           {stats.map((s) => (
             <div key={s.label} className="stat-card">
@@ -414,13 +402,13 @@ export default function HomePage() {
       <section style={{ padding: "100px 24px" }}>
         <div style={{ maxWidth: "900px", margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: "56px" }}>
-            <p style={{ color: "#a78bfa", fontWeight: "600", fontSize: "0.85rem", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "12px" }}>
+            <p style={{ color: "var(--cv-accent-text)", fontWeight: "600", fontSize: "0.85rem", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "12px" }}>
               Problem Bank
             </p>
             <h2 style={{ fontSize: "clamp(1.8rem, 4vw, 2.8rem)", marginBottom: "16px" }}>
               Handpicked for <span className="gradient-text">interview success</span>
             </h2>
-            <p style={{ color: "#94a3b8", fontSize: "1rem", maxWidth: "500px", margin: "0 auto" }}>
+            <p style={{ color: "var(--cv-text-2)", fontSize: "1rem", maxWidth: "500px", margin: "0 auto" }}>
               Every problem is tagged, categorized, and mapped to real interview questions from top companies.
             </p>
           </div>
@@ -453,7 +441,7 @@ export default function HomePage() {
           <h2 style={{ fontSize: "clamp(1.6rem, 3.5vw, 2.4rem)", marginBottom: "16px" }}>
             Master every <span className="gradient-text">topic</span>
           </h2>
-          <p style={{ color: "#94a3b8", marginBottom: "36px" }}>Structured by difficulty and concept, not just by problem number.</p>
+          <p style={{ color: "var(--cv-text-2)", marginBottom: "36px" }}>Structured by difficulty and concept, not just by problem number.</p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", justifyContent: "center" }}>
             {topics.map((t) => (
               <span key={t} className="topic-tag">
@@ -465,10 +453,10 @@ export default function HomePage() {
       </section>
 
       {/* ─── Features Section ─── */}
-      <section style={{ padding: "100px 24px", background: "rgba(17,17,24,0.4)", borderTop: "1px solid rgba(139,92,246,0.08)" }}>
+      <section style={{ padding: "100px 24px", background: "var(--cv-section-alt)", borderTop: "1px solid rgba(139,92,246,0.08)" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: "64px" }}>
-            <p style={{ color: "#a78bfa", fontWeight: "600", fontSize: "0.85rem", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "12px" }}>Why Code Vita</p>
+            <p style={{ color: "var(--cv-accent-text)", fontWeight: "600", fontSize: "0.85rem", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "12px" }}>Why Code Vita</p>
             <h2 style={{ fontSize: "clamp(1.8rem, 4vw, 2.8rem)" }}>
               Everything you need to <span className="gradient-text">level up</span>
             </h2>
@@ -478,7 +466,7 @@ export default function HomePage() {
               <div key={f.title} className="glass-card glass-card-hover" style={{ padding: "28px" }}>
                 <div className="feature-icon" style={{ background: f.color }}>{f.icon}</div>
                 <h3 style={{ fontSize: "1.1rem", fontWeight: "700", marginBottom: "10px" }}>{f.title}</h3>
-                <p style={{ color: "#94a3b8", fontSize: "0.9rem", lineHeight: 1.65 }}>{f.desc}</p>
+                <p style={{ color: "var(--cv-text-2)", fontSize: "0.9rem", lineHeight: 1.65 }}>{f.desc}</p>
               </div>
             ))}
           </div>
@@ -497,7 +485,7 @@ export default function HomePage() {
             {testimonials.map((t) => (
               <div key={t.name} className="glass-card glass-card-hover" style={{ padding: "28px" }}>
                 <div style={{ fontSize: "1.4rem", marginBottom: "16px" }}>⭐⭐⭐⭐⭐</div>
-                <p style={{ color: "#cbd5e1", fontSize: "0.92rem", lineHeight: 1.7, marginBottom: "20px", fontStyle: "italic" }}>
+                <p style={{ color: "var(--cv-text-soft)", fontSize: "0.92rem", lineHeight: 1.7, marginBottom: "20px", fontStyle: "italic" }}>
                   "{t.text}"
                 </p>
                 <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
@@ -506,7 +494,7 @@ export default function HomePage() {
                   </div>
                   <div>
                     <div style={{ fontWeight: "700", fontSize: "0.9rem" }}>{t.name}</div>
-                    <div style={{ color: "#a78bfa", fontSize: "0.8rem" }}>{t.role}</div>
+                    <div style={{ color: "var(--cv-accent-text)", fontSize: "0.8rem" }}>{t.role}</div>
                   </div>
                 </div>
               </div>
@@ -529,7 +517,7 @@ export default function HomePage() {
           <h2 style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)", marginBottom: "20px" }}>
             Ready to <span className="gradient-text">start coding?</span>
           </h2>
-          <p style={{ color: "#94a3b8", fontSize: "1.1rem", marginBottom: "40px", maxWidth: "480px", margin: "0 auto 40px" }}>
+          <p style={{ color: "var(--cv-text-2)", fontSize: "1.1rem", marginBottom: "40px", maxWidth: "480px", margin: "0 auto 40px" }}>
             Join 180,000+ developers who are leveling up their skills on Code Vita every day.
           </p>
           <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
@@ -544,7 +532,7 @@ export default function HomePage() {
       </section>
 
       {/* ─── Footer ─── */}
-      <footer style={{ padding: "40px 24px", borderTop: "1px solid rgba(139,92,246,0.1)", background: "rgba(10,10,15,0.8)" }}>
+      <footer style={{ padding: "40px 24px", borderTop: "1px solid rgba(139,92,246,0.1)", background: "var(--cv-footer-bg)" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <div style={{ width: "28px", height: "28px", borderRadius: "7px", background: "linear-gradient(135deg, #8b5cf6, #06b6d4)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontFamily: "var(--font-mono)", fontWeight: "700", color: "white" }}>
@@ -553,14 +541,11 @@ export default function HomePage() {
             <span style={{ fontWeight: "700", fontSize: "0.95rem" }}>Code Vita</span>
           </div>
           <p style={{ color: "var(--cv-text-muted)", fontSize: "0.85rem" }}>
-            © {new Date().getFullYear()} Code Vita. Built with ❤️ for developers.
+            © {CURRENT_YEAR} Code Vita. Built with ❤️ for developers.
           </p>
           <div style={{ display: "flex", gap: "20px" }}>
             {["Privacy", "Terms", "Contact"].map((l) => (
-              <a key={l} href="#" style={{ color: "var(--cv-text-muted)", textDecoration: "none", fontSize: "0.85rem", transition: "color 0.2s" }}
-                onMouseEnter={(e) => e.currentTarget.style.color = "#a78bfa"}
-                onMouseLeave={(e) => e.currentTarget.style.color = "var(--cv-text-muted)"}
-              >
+              <a key={l} href="#" className="footer-link">
                 {l}
               </a>
             ))}
