@@ -3,7 +3,12 @@ import { useState } from "react";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ email: "", password: "" });
+  const REMEMBER_KEY = "codevita:rememberedEmail";
+  const [form, setForm] = useState(() => ({
+    email: localStorage.getItem(REMEMBER_KEY) || "",
+    password: "",
+  }));
+  const [remember, setRemember] = useState(() => !!localStorage.getItem(REMEMBER_KEY));
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -20,6 +25,8 @@ export default function LoginPage() {
       setError("Please fill in all fields.");
       return;
     }
+    if (remember) localStorage.setItem(REMEMBER_KEY, form.email);
+    else localStorage.removeItem(REMEMBER_KEY);
     setLoading(true);
     // Simulate API call
     setTimeout(() => {
@@ -246,6 +253,8 @@ export default function LoginPage() {
               <input
                 id="login-remember"
                 type="checkbox"
+                checked={remember}
+                onChange={(e) => setRemember(e.target.checked)}
                 style={{
                   width: "16px",
                   height: "16px",
