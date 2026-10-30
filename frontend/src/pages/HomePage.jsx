@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { useState, useEffect, useRef } from "react";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
+import FAQ from "../components/FAQ";
 
 const CURRENT_YEAR = new Date().getFullYear();
 
@@ -500,6 +501,19 @@ export default function HomePage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ─── FAQ Section ─── */}
+      <section id="faq" style={{ padding: "100px 24px", background: "var(--cv-section-alt)", borderTop: "1px solid rgba(139,92,246,0.08)" }}>
+        <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: "48px" }}>
+            <p style={{ color: "var(--cv-accent-text)", fontWeight: "600", fontSize: "0.85rem", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "12px" }}>FAQ</p>
+            <h2 style={{ fontSize: "clamp(1.8rem, 4vw, 2.8rem)" }}>
+              Frequently asked <span className="gradient-text">questions</span>
+            </h2>
+          </div>
+          <FAQ />
         </div>
       </section>
 
