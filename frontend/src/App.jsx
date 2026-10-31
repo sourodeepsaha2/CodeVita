@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router";
 import Navbar from "./components/Navbar";
 import BackToTop from "./components/BackToTop";
+import ScrollProgress from "./components/ScrollProgress";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
@@ -8,6 +9,7 @@ import SignupPage from "./pages/SignupPage";
 function App() {
   return (
     <>
+      <ScrollProgress />
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
