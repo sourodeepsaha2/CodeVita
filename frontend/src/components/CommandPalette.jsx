@@ -15,6 +15,8 @@ export default function CommandPalette() {
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const inputRef = useRef(null);
+  const dialogRef = useRef(null);
+  const previousFocusRef = useRef(null);
   const results = COMMANDS.filter((command) =>
     `${command.label} ${command.detail} ${command.keywords}`.toLowerCase().includes(query.trim().toLowerCase())
   );
@@ -23,24 +25,30 @@ export default function CommandPalette() {
     const onKeyDown = (event) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
+        if (!open) previousFocusRef.current = document.activeElement;
         setOpen((current) => !current);
       }
       if (event.key === "Escape") setOpen(false);
     };
-    const onOpen = () => setOpen(true);
+    const onOpen = () => {
+      previousFocusRef.current = document.activeElement;
+      setOpen(true);
+    };
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener("cv:open-command-palette", onOpen);
     return () => {
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("cv:open-command-palette", onOpen);
     };
-  }, []);
+  }, [open]);
 
   useEffect(() => {
     if (open) {
       setQuery("");
       setActiveIndex(0);
       requestAnimationFrame(() => inputRef.current?.focus());
+    } else {
+      previousFocusRef.current?.focus?.();
     }
   }, [open]);
 
@@ -57,11 +65,26 @@ export default function CommandPalette() {
     }
   };
 
+  const trapTabFocus = (event) => {
+    if (event.key !== "Tab") return;
+    const focusable = dialogRef.current?.querySelectorAll("input, a[href], button:not([disabled])");
+    if (!focusable?.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
+
   if (!open) return null;
 
   return (
     <div className="command-backdrop" onMouseDown={(event) => event.target === event.currentTarget && setOpen(false)}>
-      <section className="command-palette" role="dialog" aria-modal="true" aria-labelledby="command-title">
+      <section ref={dialogRef} className="command-palette" role="dialog" aria-modal="true" aria-labelledby="command-title" onKeyDown={trapTabFocus}>
         <h2 id="command-title" className="sr-only">Quick navigation</h2>
         <label className="command-search-wrap">
           <span className="command-search-icon" aria-hidden="true">⌕</span>
