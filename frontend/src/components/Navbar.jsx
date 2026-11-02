@@ -56,6 +56,14 @@ export default function Navbar() {
 
           {/* Desktop actions */}
           <div className="nav-actions">
+            <button
+              type="button"
+              className="nav-search-trigger"
+              onClick={() => window.dispatchEvent(new Event("cv:open-command-palette"))}
+              aria-label="Open quick navigation"
+            >
+              <span>Search</span><kbd>⌘ K</kbd>
+            </button>
             <ThemeToggle />
             <Link to="/login" id="nav-login" className="btn-outline-cv btn-sm">
               Log In
@@ -87,6 +95,16 @@ export default function Navbar() {
 
       {mobileOpen && (
         <div id="mobile-menu" className="mobile-menu">
+          <button
+            type="button"
+            className="nav-search-trigger nav-search-trigger-mobile"
+            onClick={() => {
+              setMobileOpen(false);
+              window.dispatchEvent(new Event("cv:open-command-palette"));
+            }}
+          >
+            Search pages <kbd>⌘ K</kbd>
+          </button>
           {NAV_LINKS.map((link) => (
             <NavLink key={link.href} to={link.href} className="nav-link">
               {link.label}
