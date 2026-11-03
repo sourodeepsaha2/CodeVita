@@ -7,6 +7,7 @@ const COMMANDS = [
   { label: "Browse FAQs", detail: "Jump to frequently asked questions", href: "/#faq", keywords: "help questions faq" },
   { label: "Create an account", detail: "Sign up for Code Vita", href: "/signup", keywords: "register signup join" },
   { label: "Log in", detail: "Continue to your account", href: "/login", keywords: "signin sign in" },
+  { label: "Open reflection journal", detail: "Review your problem solving notes", href: "/review", keywords: "practice journal review spaced repetition" },
 ];
 
 export default function CommandPalette() {

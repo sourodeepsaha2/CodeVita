@@ -8,6 +8,7 @@ const NAV_LINKS = [
   { label: "Contest", href: "/contest" },
   { label: "Leaderboard", href: "/leaderboard" },
   { label: "Discuss", href: "/discuss" },
+  { label: "Review journal", href: "/review" },
 ];
 
 export default function Navbar() {
