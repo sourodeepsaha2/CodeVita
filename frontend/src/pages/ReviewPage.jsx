@@ -55,6 +55,8 @@ export default function ReviewPage() {
       return queueFilter === "all" || (queueFilter === "due" ? due : !due);
     })
     .sort((a, b) => new Date(a.nextReviewAt) - new Date(b.nextReviewAt));
+  const dueCount = reflections.filter((reflection) => new Date(reflection.nextReviewAt) <= new Date()).length;
+  const completedReviews = reflections.reduce((total, reflection) => total + (Number(reflection.reviewCount) || 0), 0);
 
   return (
     <main className="review-page">
@@ -63,6 +65,11 @@ export default function ReviewPage() {
         <h1>Your reflection journal</h1>
         <p>Save the thinking behind a solution and give yourself a date to revisit it.</p>
       </header>
+      <section className="review-summary-grid" aria-label="Journal progress">
+        <div className="review-summary-card"><span>IN YOUR JOURNAL</span><strong>{reflections.length}</strong><small>{reflections.length === 1 ? "problem" : "problems"} captured</small></div>
+        <div className={`review-summary-card${dueCount ? " has-due" : ""}`}><span>READY TO REVISIT</span><strong>{dueCount}</strong><small>{dueCount === 1 ? "review is due" : "reviews are due"}</small></div>
+        <div className="review-summary-card"><span>REVIEWS COMPLETED</span><strong>{completedReviews}</strong><small>revisits logged</small></div>
+      </section>
       <section className="reflection-form-card glass-card" aria-labelledby="reflection-form-title">
         <div className="review-card-heading">
           <span className="review-heading-icon" aria-hidden="true">✎</span>
