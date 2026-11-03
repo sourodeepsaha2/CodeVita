@@ -283,6 +283,32 @@
   color: var(--cv-accent-text);
 }
 
+.review-done-button {
+  margin-left: auto;
+  padding: 7px 10px;
+  border: 1px solid var(--cv-border);
+  border-radius: 8px;
+  color: var(--cv-accent-text);
+  background: var(--cv-surface-alpha);
+  font: inherit;
+  font-size: 0.74rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.review-done-button:hover {
+  border-color: var(--cv-accent);
+  background: rgba(139, 92, 246, 0.1);
+}
+
+.review-interval-hint {
+  margin-top: 8px;
+  color: var(--cv-text-muted);
+  font-size: 0.7rem;
+  text-align: right;
+}
+
 @media (max-width: 600px) {
   .review-page {
     width: min(100% - 28px, 1040px);
@@ -305,5 +331,13 @@
   .reflection-entry-notes {
     grid-template-columns: 1fr;
     gap: 14px;
+  }
+
+  .reflection-entry-meta {
+    flex-wrap: wrap;
+  }
+
+  .review-done-button {
+    margin-left: 0;
   }
 }

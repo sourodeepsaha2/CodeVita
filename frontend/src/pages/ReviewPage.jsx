@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
-import { createReflection, loadReflections, saveReflections } from "../lib/reflectionJournal";
+import { createReflection, loadReflections, saveReflections, scheduleReflectionReview, getReviewIntervalDays } from "../lib/reflectionJournal";
 import "./ReviewPage.css";
 
 export default function ReviewPage() {
@@ -21,6 +21,18 @@ export default function ReviewPage() {
     setStorageError(false);
     setReflections(next);
     return true;
+  };
+
+  const markReviewed = (id) => {
+    const next = loadReflections().map((reflection) =>
+      reflection.id === id ? scheduleReflectionReview(reflection, reflection.confidence) : reflection
+    );
+    if (!saveReflections(next)) {
+      setStorageError(true);
+      return;
+    }
+    setStorageError(false);
+    setReflections(next);
   };
 
   return (
@@ -71,7 +83,11 @@ export default function ReviewPage() {
                   <div className="reflection-entry-meta">
                     <span>Confidence <strong>{reflection.confidence}/5</strong></span>
                     <span>{reflection.reviewCount ? `Reviewed ${reflection.reviewCount} ${reflection.reviewCount === 1 ? "time" : "times"}` : "First review"}</span>
+                    <button type="button" className="review-done-button" onClick={() => markReviewed(reflection.id)}>
+                      I reviewed this <span aria-hidden="true">→</span>
+                    </button>
                   </div>
+                  <p className="review-interval-hint">After reviewing, it returns in {getReviewIntervalDays(reflection.confidence)} {getReviewIntervalDays(reflection.confidence) === 1 ? "day" : "days"} based on your confidence.</p>
                 </article>
               );
             })}
