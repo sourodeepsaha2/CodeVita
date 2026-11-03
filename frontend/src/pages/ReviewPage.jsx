@@ -55,11 +55,35 @@ export default function ReviewPage() {
             <p>Add a reflection after solving a problem. We’ll remind you when it’s time to revisit it.</p>
           </div>
         ) : (
-          <div className="reflection-list" />
+          <div className="reflection-list">
+            {[...reflections].sort((a, b) => new Date(a.nextReviewAt) - new Date(b.nextReviewAt)).map((reflection) => {
+              const due = new Date(reflection.nextReviewAt) <= new Date();
+              return (
+                <article className={`reflection-entry glass-card${due ? " is-due" : ""}`} key={reflection.id}>
+                  <div className="reflection-entry-topline">
+                    <h3>{reflection.problem}</h3>
+                    <span className={`reflection-due-pill${due ? " is-due" : ""}`}>{due ? "Due to review" : `Review ${formatReviewDate(reflection.nextReviewAt)}`}</span>
+                  </div>
+                  <div className="reflection-entry-notes">
+                    <div><span>APPROACH</span><p>{reflection.approach}</p></div>
+                    {reflection.blocker && <div><span>STUCK ON</span><p>{reflection.blocker}</p></div>}
+                  </div>
+                  <div className="reflection-entry-meta">
+                    <span>Confidence <strong>{reflection.confidence}/5</strong></span>
+                    <span>{reflection.reviewCount ? `Reviewed ${reflection.reviewCount} ${reflection.reviewCount === 1 ? "time" : "times"}` : "First review"}</span>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
         )}
       </section>
     </main>
   );
+}
+
+function formatReviewDate(value) {
+  return new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric" }).format(new Date(value));
 }
 
 function ReflectionForm({ onAdd }) {
