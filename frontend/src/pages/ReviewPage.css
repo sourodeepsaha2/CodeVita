@@ -279,6 +279,29 @@
   font-size: 1.08rem;
 }
 
+.reflection-entry-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reflection-delete-button {
+  width: 28px;
+  height: 28px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: var(--cv-text-muted);
+  background: transparent;
+  font: 1.1rem/1 var(--font-sans);
+  cursor: pointer;
+}
+
+.reflection-delete-button:hover {
+  border-color: rgba(239, 68, 68, 0.25);
+  color: var(--cv-danger);
+  background: rgba(239, 68, 68, 0.08);
+}
+
 .reflection-due-pill {
   padding: 5px 9px;
   border: 1px solid var(--cv-border);
@@ -380,6 +403,11 @@
   .reflection-entry-topline {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .reflection-entry-actions {
+    width: 100%;
+    justify-content: space-between;
   }
 
   .reflection-entry-notes {

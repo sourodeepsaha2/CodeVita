@@ -39,6 +39,16 @@ export default function ReviewPage() {
     setReflections(next);
   };
 
+  const removeReflection = (id) => {
+    const next = loadReflections().filter((reflection) => reflection.id !== id);
+    if (!saveReflections(next)) {
+      setStorageError(true);
+      return;
+    }
+    setStorageError(false);
+    setReflections(next);
+  };
+
   const visibleReflections = reflections
     .filter((reflection) => {
       const due = new Date(reflection.nextReviewAt) <= new Date();
@@ -92,7 +102,10 @@ export default function ReviewPage() {
                 <article className={`reflection-entry glass-card${due ? " is-due" : ""}`} key={reflection.id}>
                   <div className="reflection-entry-topline">
                     <h3>{reflection.problem}</h3>
-                    <span className={`reflection-due-pill${due ? " is-due" : ""}`}>{due ? "Due to review" : `Review ${formatReviewDate(reflection.nextReviewAt)}`}</span>
+                    <div className="reflection-entry-actions">
+                      <span className={`reflection-due-pill${due ? " is-due" : ""}`}>{due ? "Due to review" : `Review ${formatReviewDate(reflection.nextReviewAt)}`}</span>
+                      <button type="button" className="reflection-delete-button" onClick={() => removeReflection(reflection.id)} aria-label={`Delete reflection for ${reflection.problem}`} title="Delete reflection">×</button>
+                    </div>
                   </div>
                   <div className="reflection-entry-notes">
                     <div><span>APPROACH</span><p>{reflection.approach}</p></div>
