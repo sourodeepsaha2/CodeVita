@@ -7,6 +7,7 @@ export default function ReviewPage() {
   useDocumentTitle("Reflection Journal");
   const [reflections, setReflections] = useState([]);
   const [storageError, setStorageError] = useState(false);
+  const [queueFilter, setQueueFilter] = useState("all");
 
   useEffect(() => {
     const refresh = () => setReflections(loadReflections());
@@ -38,6 +39,13 @@ export default function ReviewPage() {
     setReflections(next);
   };
 
+  const visibleReflections = reflections
+    .filter((reflection) => {
+      const due = new Date(reflection.nextReviewAt) <= new Date();
+      return queueFilter === "all" || (queueFilter === "due" ? due : !due);
+    })
+    .sort((a, b) => new Date(a.nextReviewAt) - new Date(b.nextReviewAt));
+
   return (
     <main className="review-page">
       <header className="review-header">
@@ -62,6 +70,13 @@ export default function ReviewPage() {
             <p className="review-eyebrow">YOUR PRACTICE</p>
             <h2 id="review-list-title">Review queue <span>{reflections.length}</span></h2>
           </div>
+          <div className="review-filters" role="group" aria-label="Filter review queue">
+            {[{ id: "all", label: "All" }, { id: "due", label: "Due" }, { id: "upcoming", label: "Upcoming" }].map((filter) => (
+              <button key={filter.id} type="button" className={queueFilter === filter.id ? "is-active" : ""} aria-pressed={queueFilter === filter.id} onClick={() => setQueueFilter(filter.id)}>
+                {filter.label}{filter.id === "due" && <span>{reflections.filter((item) => new Date(item.nextReviewAt) <= new Date()).length}</span>}
+              </button>
+            ))}
+          </div>
         </div>
         {reflections.length === 0 ? (
           <div className="review-empty glass-card">
@@ -69,9 +84,9 @@ export default function ReviewPage() {
             <h3>Your journal is ready</h3>
             <p>Add a reflection after solving a problem. We’ll remind you when it’s time to revisit it.</p>
           </div>
-        ) : (
+        ) : visibleReflections.length ? (
           <div className="reflection-list">
-            {[...reflections].sort((a, b) => new Date(a.nextReviewAt) - new Date(b.nextReviewAt)).map((reflection) => {
+            {visibleReflections.map((reflection) => {
               const due = new Date(reflection.nextReviewAt) <= new Date();
               return (
                 <article className={`reflection-entry glass-card${due ? " is-due" : ""}`} key={reflection.id}>
@@ -95,6 +110,8 @@ export default function ReviewPage() {
               );
             })}
           </div>
+        ) : (
+          <div className="review-filter-empty glass-card">No {queueFilter === "due" ? "reviews are due" : "upcoming reviews"} in this view.</div>
         )}
       </section>
     </main>
