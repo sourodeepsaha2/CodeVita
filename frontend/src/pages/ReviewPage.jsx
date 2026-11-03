@@ -9,7 +9,10 @@ export default function ReviewPage() {
   const [storageError, setStorageError] = useState(false);
 
   useEffect(() => {
-    setReflections(loadReflections());
+    const refresh = () => setReflections(loadReflections());
+    refresh();
+    window.addEventListener("storage", refresh);
+    return () => window.removeEventListener("storage", refresh);
   }, []);
 
   const addReflection = (reflection) => {
