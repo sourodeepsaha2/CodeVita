@@ -59,6 +59,114 @@
   font-size: 0.84rem;
 }
 
+.reflection-form {
+  display: grid;
+  gap: 18px;
+}
+
+.reflection-field {
+  display: grid;
+  gap: 8px;
+}
+
+.reflection-field > span {
+  color: var(--cv-text-soft);
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.reflection-field b {
+  color: var(--cv-danger);
+}
+
+.reflection-field em {
+  margin-left: 5px;
+  color: var(--cv-text-muted);
+  font-size: 0.73rem;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.reflection-field input:not([type="range"]),
+.reflection-field textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--cv-border);
+  border-radius: 10px;
+  outline: none;
+  color: var(--cv-text);
+  background: var(--cv-input-bg);
+  font: inherit;
+  font-size: 0.88rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.reflection-field input:focus,
+.reflection-field textarea:focus {
+  border-color: var(--cv-accent);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.13);
+}
+
+.reflection-field textarea {
+  min-height: 82px;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.reflection-field [aria-invalid="true"] {
+  border-color: var(--cv-danger) !important;
+}
+
+.reflection-field > small {
+  color: var(--cv-danger);
+  font-size: 0.75rem;
+}
+
+.reflection-confidence > small {
+  color: var(--cv-text-muted);
+}
+
+.confidence-control {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.confidence-control input {
+  width: min(100%, 320px);
+  accent-color: var(--cv-accent);
+}
+
+.confidence-control strong {
+  color: var(--cv-accent-text);
+  font: 600 0.84rem var(--font-mono);
+}
+
+.reflection-submit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 2px;
+}
+
+.reflection-submit-row .btn-primary-cv {
+  min-height: 44px;
+  padding: 0 20px;
+  font-size: 0.86rem;
+}
+
+.reflection-save-message {
+  color: var(--cv-success);
+  font-size: 0.8rem;
+}
+
+.reflection-storage-error {
+  margin-top: 12px;
+  color: var(--cv-danger);
+  font-size: 0.8rem;
+}
+
 .reflection-list-section {
   margin-top: 48px;
 }

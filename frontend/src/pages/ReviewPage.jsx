@@ -1,15 +1,27 @@
 import { useEffect, useState } from "react";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
-import { loadReflections } from "../lib/reflectionJournal";
+import { createReflection, loadReflections, saveReflections } from "../lib/reflectionJournal";
 import "./ReviewPage.css";
 
 export default function ReviewPage() {
   useDocumentTitle("Reflection Journal");
   const [reflections, setReflections] = useState([]);
+  const [storageError, setStorageError] = useState(false);
 
   useEffect(() => {
     setReflections(loadReflections());
   }, []);
+
+  const addReflection = (reflection) => {
+    const next = [reflection, ...loadReflections()];
+    if (!saveReflections(next)) {
+      setStorageError(true);
+      return false;
+    }
+    setStorageError(false);
+    setReflections(next);
+    return true;
+  };
 
   return (
     <main className="review-page">
@@ -26,7 +38,8 @@ export default function ReviewPage() {
             <p>Write down what you learned while it’s fresh.</p>
           </div>
         </div>
-        <ReflectionForm onAdd={(reflection) => setReflections((current) => [reflection, ...current])} />
+        <ReflectionForm onAdd={addReflection} />
+        {storageError && <p className="reflection-storage-error" role="alert">Your browser couldn’t save this reflection. Check available storage and try again.</p>}
       </section>
       <section className="reflection-list-section" aria-labelledby="review-list-title">
         <div className="review-list-heading">
@@ -50,7 +63,57 @@ export default function ReviewPage() {
 }
 
 function ReflectionForm({ onAdd }) {
-  return <form className="reflection-form" onSubmit={(event) => event.preventDefault()}>
-    <p className="reflection-form-placeholder">Reflection form coming together…</p>
-  </form>;
+  const [values, setValues] = useState({ problem: "", approach: "", blocker: "", confidence: 3 });
+  const [errors, setErrors] = useState({});
+  const [saved, setSaved] = useState(false);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const nextErrors = {};
+    if (!values.problem.trim()) nextErrors.problem = "Add the problem name.";
+    if (!values.approach.trim()) nextErrors.approach = "Describe the approach you tried.";
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length) return;
+    if (onAdd(createReflection(values))) {
+      setValues({ problem: "", approach: "", blocker: "", confidence: 3 });
+      setSaved(true);
+      window.setTimeout(() => setSaved(false), 2400);
+    }
+  };
+
+  const update = (field) => (event) => {
+    setValues((current) => ({ ...current, [field]: event.target.value }));
+    setErrors((current) => ({ ...current, [field]: "" }));
+  };
+
+  return (
+    <form className="reflection-form" onSubmit={handleSubmit} noValidate>
+      <label className="reflection-field">
+        <span>Problem name <b aria-hidden="true">*</b></span>
+        <input value={values.problem} onChange={update("problem")} placeholder="e.g. Two Sum" aria-invalid={Boolean(errors.problem)} />
+        {errors.problem && <small role="alert">{errors.problem}</small>}
+      </label>
+      <label className="reflection-field">
+        <span>What approach did you try? <b aria-hidden="true">*</b></span>
+        <textarea value={values.approach} onChange={update("approach")} rows="3" placeholder="Describe the key idea, data structure, or steps you used…" aria-invalid={Boolean(errors.approach)} />
+        {errors.approach && <small role="alert">{errors.approach}</small>}
+      </label>
+      <label className="reflection-field">
+        <span>Where did you get stuck? <em>Optional</em></span>
+        <textarea value={values.blocker} onChange={update("blocker")} rows="2" placeholder="A bug, edge case, or part you want to understand better…" />
+      </label>
+      <label className="reflection-field reflection-confidence">
+        <span>How confident are you explaining this solution?</span>
+        <div className="confidence-control">
+          <input type="range" min="1" max="5" value={values.confidence} onChange={update("confidence")} aria-valuetext={`${values.confidence} out of 5`} />
+          <strong>{values.confidence}/5</strong>
+        </div>
+        <small>Lower confidence means we’ll bring it back sooner.</small>
+      </label>
+      <div className="reflection-submit-row">
+        <p className="reflection-save-message" role="status">{saved ? "Saved to your review queue." : ""}</p>
+        <button type="submit" className="btn-primary-cv">Save reflection <span aria-hidden="true">→</span></button>
+      </div>
+    </form>
+  );
 }
