@@ -58,7 +58,7 @@ function ProblemRow({ num, title, difficulty, tags, acceptance }) {
       <span style={{ flex: 1, fontWeight: "500", fontSize: "0.92rem" }}>{title}</span>
       <span style={{ display: "flex", gap: "6px" }}>
         {tags.map((t) => (
-          <span key={t} style={{ padding: "3px 9px", borderRadius: "6px", fontSize: "0.75rem", background: "rgba(139,92,246,0.1)", color: "var(--cv-accent-text)", border: "1px solid rgba(139,92,246,0.2)" }}>
+          <span key={t} style={{ padding: "3px 9px", borderRadius: "6px", fontSize: "0.75rem", background: "rgba(79,189,145,0.1)", color: "var(--cv-accent-text)", border: "1px solid rgba(79,189,145,0.2)" }}>
             {t}
           </span>
         ))}
@@ -177,37 +177,37 @@ export default function HomePage() {
   const features = [
     {
       icon: "⚡",
-      color: "rgba(245,158,11,0.15)",
+      color: "rgba(231,184,107,0.12)",
       title: "Lightning-Fast Judge",
       desc: "Sub-100ms execution feedback with support for C++, Java, Python, JavaScript and more.",
     },
     {
       icon: "🏆",
-      color: "rgba(139,92,246,0.15)",
+      color: "rgba(79,189,145,0.12)",
       title: "Weekly Contests",
       desc: "Compete globally in timed contests. Climb the leaderboard and earn exclusive badges.",
     },
     {
       icon: "🗺️",
-      color: "rgba(6,182,212,0.15)",
+      color: "rgba(131,214,174,0.12)",
       title: "Curated Roadmaps",
       desc: "Structured learning paths from Arrays to System Design, tailored for top tech interviews.",
     },
     {
       icon: "🤖",
-      color: "rgba(16,185,129,0.15)",
+      color: "rgba(79,189,145,0.12)",
       title: "AI Hints & Reviews",
       desc: "Get AI-powered hints without spoilers, and post-solve code reviews to level up fast.",
     },
     {
       icon: "📊",
-      color: "rgba(239,68,68,0.15)",
+      color: "rgba(79,189,145,0.12)",
       title: "Deep Analytics",
       desc: "Track your progress, time complexity trends, and weak areas with beautiful dashboards.",
     },
     {
       icon: "👥",
-      color: "rgba(251,146,60,0.15)",
+      color: "rgba(79,189,145,0.12)",
       title: "Discussion Forums",
       desc: "Discuss solutions, share approaches, and learn different perspectives from the community.",
     },
@@ -276,8 +276,8 @@ export default function HomePage() {
                 alignItems: "center",
                 gap: "8px",
                 padding: "7px 16px",
-                background: "rgba(139,92,246,0.1)",
-                border: "1px solid rgba(139,92,246,0.3)",
+                background: "rgba(79,189,145,0.1)",
+                border: "1px solid rgba(79,189,145,0.3)",
                 borderRadius: "100px",
                 marginBottom: "28px",
                 fontSize: "0.82rem",
@@ -299,7 +299,7 @@ export default function HomePage() {
               <span className="gradient-text">DSA & CP</span>
               <br />
               Land Your{" "}
-              <span style={{ color: "#06b6d4" }}>Dream Job</span>
+              <span style={{ color: "var(--cv-accent-2)" }}>Dream Job</span>
             </h1>
 
             <p
@@ -352,7 +352,7 @@ export default function HomePage() {
                   position: "absolute",
                   inset: "-2px",
                   borderRadius: "14px",
-                  background: "linear-gradient(135deg, rgba(139,92,246,0.5), rgba(6,182,212,0.3))",
+                  background: "linear-gradient(135deg, rgba(79,189,145,0.38), rgba(131,214,174,0.3))",
                   filter: "blur(1px)",
                   zIndex: -1,
                 }}
@@ -364,13 +364,13 @@ export default function HomePage() {
                   position: "absolute",
                   bottom: "-20px",
                   right: "-20px",
-                  background: "linear-gradient(135deg, #8b5cf6, #7c3aed)",
+                  background: "linear-gradient(135deg, #4fbd91, #287b5a)",
                   borderRadius: "12px",
                   padding: "10px 16px",
                   fontSize: "0.82rem",
                   fontWeight: "700",
                   color: "white",
-                  boxShadow: "0 0 20px rgba(139,92,246,0.5)",
+                  boxShadow: "0 0 20px rgba(79,189,145,0.38)",
                   display: "flex",
                   alignItems: "center",
                   gap: "8px",
@@ -490,7 +490,7 @@ export default function HomePage() {
                   "{t.text}"
                 </p>
                 <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "rgba(139,92,246,0.2)", border: "1px solid rgba(139,92,246,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.2rem" }}>
+                  <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "rgba(79,189,145,0.2)", border: "1px solid rgba(79,189,145,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.2rem" }}>
                     {t.avatar}
                   </div>
                   <div>
@@ -523,7 +523,7 @@ export default function HomePage() {
           padding: "100px 24px",
           textAlign: "center",
           position: "relative",
-          borderTop: "1px solid rgba(139,92,246,0.1)",
+          borderTop: "1px solid rgba(79,189,145,0.1)",
         }}
       >
         <div className="orb orb-purple" style={{ width: "600px", height: "600px", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }} />
@@ -546,10 +546,10 @@ export default function HomePage() {
       </section>
 
       {/* ─── Footer ─── */}
-      <footer style={{ padding: "40px 24px", borderTop: "1px solid rgba(139,92,246,0.1)", background: "var(--cv-footer-bg)" }}>
+      <footer style={{ padding: "40px 24px", borderTop: "1px solid rgba(79,189,145,0.1)", background: "var(--cv-footer-bg)" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <div style={{ width: "28px", height: "28px", borderRadius: "7px", background: "linear-gradient(135deg, #8b5cf6, #06b6d4)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontFamily: "var(--font-mono)", fontWeight: "700", color: "white" }}>
+            <div style={{ width: "28px", height: "28px", borderRadius: "7px", background: "linear-gradient(135deg, #4fbd91, #83d6ae)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontFamily: "var(--font-mono)", fontWeight: "700", color: "white" }}>
               {"</>"}
             </div>
             <span style={{ fontWeight: "700", fontSize: "0.95rem" }}>Code Vita</span>
