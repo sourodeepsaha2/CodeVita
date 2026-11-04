@@ -8,11 +8,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(139, 92, 246, 0.4);
+  border: 1px solid rgba(79, 189, 145, 0.4);
   border-radius: 50%;
   color: #fff;
-  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+  background: linear-gradient(135deg, #4fbd91, #287b5a);
+  box-shadow: 0 8px 24px rgba(79, 189, 145, 0.4);
   cursor: pointer;
   opacity: 0;
   transform: translateY(12px);
@@ -28,11 +28,11 @@
 
 .back-to-top:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(139, 92, 246, 0.55);
+  box-shadow: 0 12px 30px rgba(79, 189, 145, 0.55);
 }
 
 .back-to-top:focus-visible {
-  outline: 2px solid #c4b5fd;
+  outline: 2px solid #a2e8c5;
   outline-offset: 3px;
 }
 
