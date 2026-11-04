@@ -384,7 +384,7 @@ export default function HomePage() {
       </section>
 
       {/* ─── Stats Section ─── */}
-      <section style={{ padding: "80px 24px", borderTop: "1px solid rgba(139,92,246,0.08)", borderBottom: "1px solid rgba(139,92,246,0.08)", background: "var(--cv-section-alt)" }}>
+      <section style={{ padding: "80px 24px", borderTop: "1px solid rgba(79,189,145,0.08)", borderBottom: "1px solid rgba(79,189,145,0.08)", background: "var(--cv-section-alt)" }}>
         <div style={{ maxWidth: "1000px", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "24px" }}>
           {stats.map((s) => (
             <div key={s.label} className="stat-card">
@@ -416,7 +416,7 @@ export default function HomePage() {
 
           <div className="glass-card" style={{ overflow: "hidden" }}>
             {/* Table Header */}
-            <div style={{ display: "flex", gap: "16px", padding: "12px 20px", borderBottom: "1px solid rgba(139,92,246,0.12)", background: "rgba(139,92,246,0.04)" }}>
+            <div style={{ display: "flex", gap: "16px", padding: "12px 20px", borderBottom: "1px solid rgba(79,189,145,0.12)", background: "rgba(79,189,145,0.04)" }}>
               <span style={{ color: "var(--cv-text-muted)", fontSize: "0.8rem", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.08em", minWidth: "36px" }}>#</span>
               <span style={{ color: "var(--cv-text-muted)", fontSize: "0.8rem", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.08em", flex: 1 }}>Title</span>
               <span style={{ color: "var(--cv-text-muted)", fontSize: "0.8rem", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.08em" }}>Tags</span>
@@ -454,7 +454,7 @@ export default function HomePage() {
       </section>
 
       {/* ─── Features Section ─── */}
-      <section style={{ padding: "100px 24px", background: "var(--cv-section-alt)", borderTop: "1px solid rgba(139,92,246,0.08)" }}>
+      <section style={{ padding: "100px 24px", background: "var(--cv-section-alt)", borderTop: "1px solid rgba(79,189,145,0.08)" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: "64px" }}>
             <p style={{ color: "var(--cv-accent-text)", fontWeight: "600", fontSize: "0.85rem", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "12px" }}>Why Code Vita</p>
@@ -505,7 +505,7 @@ export default function HomePage() {
       </section>
 
       {/* ─── FAQ Section ─── */}
-      <section id="faq" style={{ padding: "100px 24px", background: "var(--cv-section-alt)", borderTop: "1px solid rgba(139,92,246,0.08)" }}>
+      <section id="faq" style={{ padding: "100px 24px", background: "var(--cv-section-alt)", borderTop: "1px solid rgba(79,189,145,0.08)" }}>
         <div style={{ maxWidth: "900px", margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: "48px" }}>
             <p style={{ color: "var(--cv-accent-text)", fontWeight: "600", fontSize: "0.85rem", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "12px" }}>FAQ</p>
