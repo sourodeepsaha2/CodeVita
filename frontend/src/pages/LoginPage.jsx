@@ -68,7 +68,7 @@ export default function LoginPage() {
               left: 0,
               right: 0,
               height: "2px",
-              background: "linear-gradient(90deg, #8b5cf6, #06b6d4, #f59e0b)",
+              background: "linear-gradient(90deg, #4fbd91, #83d6ae)",
             }}
           />
 
@@ -80,7 +80,7 @@ export default function LoginPage() {
                   width: "52px",
                   height: "52px",
                   borderRadius: "14px",
-                  background: "linear-gradient(135deg, #8b5cf6, #7c3aed)",
+                  background: "linear-gradient(135deg, #4fbd91, #287b5a)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -88,7 +88,7 @@ export default function LoginPage() {
                   fontFamily: "var(--font-mono)",
                   fontWeight: "700",
                   color: "white",
-                  boxShadow: "0 0 30px rgba(139,92,246,0.4)",
+                  boxShadow: "0 0 30px rgba(79,189,145,0.4)",
                   marginBottom: "4px",
                 }}
                 className="animate-pulse-glow"
@@ -101,7 +101,7 @@ export default function LoginPage() {
                   fontWeight: "700",
                   letterSpacing: "0.12em",
                   textTransform: "uppercase",
-                  color: "#a78bfa",
+                  color: "#83d6ae",
                 }}
               >
                 Code Vita
@@ -186,7 +186,7 @@ export default function LoginPage() {
                 onBlur={() => setFocusField(null)}
                 className="input-cv"
                 style={{
-                  borderColor: focusField === "email" ? "rgba(139,92,246,0.6)" : undefined,
+                  borderColor: focusField === "email" ? "rgba(79,189,145,0.6)" : undefined,
                 }}
               />
             </div>
@@ -202,9 +202,9 @@ export default function LoginPage() {
                 </label>
                 <a
                   href="#"
-                  style={{ fontSize: "0.82rem", color: "#a78bfa", textDecoration: "none", transition: "color 0.2s" }}
+                  style={{ fontSize: "0.82rem", color: "#83d6ae", textDecoration: "none", transition: "color 0.2s" }}
                   onMouseEnter={(e) => e.currentTarget.style.color = "#c4b5fd"}
-                  onMouseLeave={(e) => e.currentTarget.style.color = "#a78bfa"}
+                  onMouseLeave={(e) => e.currentTarget.style.color = "#83d6ae"}
                 >
                   Forgot password?
                 </a>
@@ -239,7 +239,7 @@ export default function LoginPage() {
                     padding: "4px",
                     transition: "color 0.2s",
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = "#a78bfa"}
+                  onMouseEnter={(e) => e.currentTarget.style.color = "#83d6ae"}
                   onMouseLeave={(e) => e.currentTarget.style.color = "var(--cv-text-muted)"}
                   aria-label={showPass ? "Hide password" : "Show password"}
                 >
@@ -258,7 +258,7 @@ export default function LoginPage() {
                 style={{
                   width: "16px",
                   height: "16px",
-                  accentColor: "#8b5cf6",
+                  accentColor: "#4fbd91",
                   cursor: "pointer",
                 }}
               />
@@ -301,9 +301,9 @@ export default function LoginPage() {
             Don't have an account?{" "}
             <Link
               to="/signup"
-              style={{ color: "#a78bfa", fontWeight: "600", textDecoration: "none" }}
+              style={{ color: "#83d6ae", fontWeight: "600", textDecoration: "none" }}
               onMouseEnter={(e) => e.currentTarget.style.color = "#c4b5fd"}
-              onMouseLeave={(e) => e.currentTarget.style.color = "#a78bfa"}
+              onMouseLeave={(e) => e.currentTarget.style.color = "#83d6ae"}
             >
               Sign up free
             </Link>
@@ -313,9 +313,9 @@ export default function LoginPage() {
         {/* Bottom note */}
         <p style={{ textAlign: "center", marginTop: "20px", color: "var(--cv-text-muted)", fontSize: "0.78rem" }}>
           By signing in, you agree to our{" "}
-          <a href="#" style={{ color: "#a78bfa", textDecoration: "none" }}>Terms of Service</a>
+          <a href="#" style={{ color: "#83d6ae", textDecoration: "none" }}>Terms of Service</a>
           {" "}and{" "}
-          <a href="#" style={{ color: "#a78bfa", textDecoration: "none" }}>Privacy Policy</a>.
+          <a href="#" style={{ color: "#83d6ae", textDecoration: "none" }}>Privacy Policy</a>.
         </p>
       </div>
     </div>
