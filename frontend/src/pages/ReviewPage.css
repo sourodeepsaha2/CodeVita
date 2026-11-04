@@ -60,8 +60,8 @@
 }
 
 .review-summary-card.has-due {
-  border-color: rgba(245, 158, 11, 0.32);
-  background: rgba(245, 158, 11, 0.045);
+  border-color: rgba(231, 184, 107, 0.32);
+  background: rgba(231, 184, 107, 0.045);
 }
 
 .review-summary-card.has-due strong {
@@ -86,7 +86,7 @@
   place-items: center;
   border-radius: 13px;
   color: var(--cv-accent-text);
-  background: rgba(139, 92, 246, 0.13);
+  background: rgba(79, 189, 145, 0.13);
   font-size: 1.4rem;
 }
 
@@ -146,7 +146,7 @@
 .reflection-field input:focus,
 .reflection-field textarea:focus {
   border-color: var(--cv-accent);
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.13);
+  box-shadow: 0 0 0 3px rgba(79, 189, 145, 0.13);
 }
 
 .reflection-field textarea {
@@ -246,7 +246,7 @@
 
 .review-filters button.is-active {
   color: var(--cv-accent-text);
-  background: rgba(139, 92, 246, 0.12);
+  background: rgba(79, 189, 145, 0.12);
 }
 
 .review-filters button span {
@@ -254,7 +254,7 @@
   padding: 1px 4px;
   border-radius: 99px;
   color: var(--cv-warning);
-  background: rgba(245, 158, 11, 0.12);
+  background: rgba(231, 184, 107, 0.12);
   font: 0.65rem var(--font-mono);
   text-align: center;
 }
@@ -306,7 +306,7 @@
 }
 
 .reflection-entry.is-due {
-  border-color: rgba(245, 158, 11, 0.38);
+  border-color: rgba(231, 184, 107, 0.38);
 }
 
 .reflection-entry-topline,
@@ -355,9 +355,9 @@
 }
 
 .reflection-due-pill.is-due {
-  border-color: rgba(245, 158, 11, 0.3);
+  border-color: rgba(231, 184, 107, 0.3);
   color: var(--cv-warning);
-  background: rgba(245, 158, 11, 0.08);
+  background: rgba(231, 184, 107, 0.08);
 }
 
 .reflection-entry-notes {
@@ -413,7 +413,7 @@
 
 .review-done-button:hover {
   border-color: var(--cv-accent);
-  background: rgba(139, 92, 246, 0.1);
+  background: rgba(79, 189, 145, 0.1);
 }
 
 .review-interval-hint {

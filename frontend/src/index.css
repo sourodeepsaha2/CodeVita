@@ -29,7 +29,7 @@
   --cv-text-muted: #789087;
   --cv-danger: #f87171;
   --cv-success: #10b981;
-  --cv-warning: #f59e0b;
+  --cv-warning: #e7b86b;
   --cv-orb-opacity: 1;
   --cv-glow: 0 0 40px rgba(79, 189, 145, 0.24);
   --cv-glow-sm: 0 0 20px rgba(79, 189, 145, 0.14);
@@ -64,7 +64,7 @@
   --cv-text-muted: #718279;
   --cv-danger: #dc2626;
   --cv-success: #059669;
-  --cv-warning: #b45309;
+  --cv-warning: #94600f;
   --cv-orb-opacity: 0.5;
   --cv-glow: 0 0 40px rgba(35, 132, 93, 0.16);
   --cv-glow-sm: 0 0 20px rgba(35, 132, 93, 0.12);
@@ -273,11 +273,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .orb-cyan {
-  background: radial-gradient(circle, rgba(6, 182, 212, 0.15), transparent 70%);
+  background: radial-gradient(circle, rgba(131, 214, 174, 0.12), transparent 70%);
 }
 
 .orb-amber {
-  background: radial-gradient(circle, rgba(245, 158, 11, 0.1), transparent 70%);
+  background: radial-gradient(circle, rgba(231, 184, 107, 0.09), transparent 70%);
 }
 
 /* ─── Tag / Badge ─── */
