@@ -273,7 +273,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .orb-cyan {
-  background: radial-gradient(circle, rgba(131, 214, 174, 0.12), transparent 70%);
+  background: radial-gradient(circle, rgba(155, 180, 255, 0.1), transparent 70%);
 }
 
 .orb-amber {

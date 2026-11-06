@@ -29,7 +29,7 @@ function PasswordStrength({ password }) {
             className="strength-bar"
             style={{
               flex: 1,
-              background: i < score ? level.color : "rgba(79,189,145,0.15)",
+              background: i < score ? level.color : "var(--cv-surface-2)",
             }}
           />
         ))}
@@ -114,7 +114,7 @@ export default function SignupPage() {
     borderColor: errors[field]
       ? "rgba(239,68,68,0.6)"
       : focusField === field
-      ? "rgba(79,189,145,0.6)"
+      ? "rgba(109,145,245,0.6)"
       : undefined,
     boxShadow: errors[field]
       ? "0 0 0 3px rgba(239,68,68,0.1)"
@@ -150,12 +150,12 @@ export default function SignupPage() {
           <h2 style={{ fontSize: "1.8rem", marginBottom: "12px", fontWeight: "800" }}>Welcome aboard!</h2>
           <p style={{ color: "#94a3b8", marginBottom: "8px" }}>
             Your account{" "}
-            <span style={{ color: "#83d6ae", fontWeight: "600" }}>@{form.username}</span>{" "}
+            <span style={{ color: "#9bb4ff", fontWeight: "600" }}>@{form.username}</span>{" "}
             has been created.
           </p>
           <p style={{ color: "var(--cv-text-muted)", fontSize: "0.88rem", marginBottom: "32px" }}>
             We sent a verification email to{" "}
-            <span style={{ color: "#83d6ae" }}>{form.email}</span>
+            <span style={{ color: "#9bb4ff" }}>{form.email}</span>
           </p>
           <button
             className="btn-primary-cv"
@@ -199,7 +199,7 @@ export default function SignupPage() {
               left: 0,
               right: 0,
               height: "2px",
-              background: "linear-gradient(90deg, #4fbd91, #83d6ae)",
+              background: "linear-gradient(90deg, #5278df, #9bb4ff)",
             }}
           />
 
@@ -211,7 +211,7 @@ export default function SignupPage() {
                   width: "52px",
                   height: "52px",
                   borderRadius: "14px",
-                  background: "linear-gradient(135deg, #4fbd91, #287b5a)",
+                  background: "linear-gradient(135deg, #6d91f5, #365fc7)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -219,14 +219,14 @@ export default function SignupPage() {
                   fontFamily: "var(--font-mono)",
                   fontWeight: "700",
                   color: "white",
-                  boxShadow: "0 0 30px rgba(79,189,145,0.4)",
+                  boxShadow: "0 8px 22px rgba(54,95,199,0.24)",
                   marginBottom: "4px",
                 }}
                 className="animate-pulse-glow"
               >
                 {"</>"}
               </div>
-              <span style={{ fontSize: "0.75rem", fontWeight: "700", letterSpacing: "0.12em", textTransform: "uppercase", color: "#83d6ae" }}>
+              <span style={{ fontSize: "0.75rem", fontWeight: "700", letterSpacing: "0.12em", textTransform: "uppercase", color: "#9bb4ff" }}>
                 Code Vita
               </span>
             </Link>
@@ -393,13 +393,13 @@ export default function SignupPage() {
                     setAgreed(e.target.checked);
                     setErrors((prev) => ({ ...prev, agreed: "" }));
                   }}
-                  style={{ width: "16px", height: "16px", marginTop: "2px", accentColor: "#4fbd91", flexShrink: 0, cursor: "pointer" }}
+                  style={{ width: "16px", height: "16px", marginTop: "2px", accentColor: "#6d91f5", flexShrink: 0, cursor: "pointer" }}
                 />
                 <span style={{ fontSize: "0.84rem", color: "#94a3b8", lineHeight: 1.5 }}>
                   I agree to Code Vita's{" "}
-                  <a href="#" style={{ color: "#83d6ae", textDecoration: "none" }}>Terms of Service</a>
+                  <a href="#" style={{ color: "#9bb4ff", textDecoration: "none" }}>Terms of Service</a>
                   {" "}and{" "}
-                  <a href="#" style={{ color: "#83d6ae", textDecoration: "none" }}>Privacy Policy</a>
+                  <a href="#" style={{ color: "#9bb4ff", textDecoration: "none" }}>Privacy Policy</a>
                 </span>
               </label>
               {errors.agreed && (
@@ -441,7 +441,7 @@ export default function SignupPage() {
             Already have an account?{" "}
             <Link
               to="/login"
-              style={{ color: "#83d6ae", fontWeight: "600", textDecoration: "none" }}
+              style={{ color: "#9bb4ff", fontWeight: "600", textDecoration: "none" }}
             >
               Sign in
             </Link>
