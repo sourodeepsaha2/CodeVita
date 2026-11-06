@@ -45,7 +45,7 @@ function AnimatedCounter({ target, suffix = "", duration = 2000 }) {
 function ProblemRow({ num, title, difficulty, tags, acceptance }) {
   const diffColors = {
     Easy: { bg: "rgba(16,185,129,0.12)", text: "#10b981", border: "rgba(16,185,129,0.25)" },
-    Medium: { bg: "rgba(245,158,11,0.12)", text: "#f59e0b", border: "rgba(245,158,11,0.25)" },
+    Medium: { bg: "rgba(214,180,119,0.12)", text: "#f59e0b", border: "rgba(245,158,11,0.25)" },
     Hard: { bg: "rgba(239,68,68,0.12)", text: "#ef4444", border: "rgba(239,68,68,0.25)" },
   };
   const c = diffColors[difficulty];
@@ -58,7 +58,7 @@ function ProblemRow({ num, title, difficulty, tags, acceptance }) {
       <span style={{ flex: 1, fontWeight: "500", fontSize: "0.92rem" }}>{title}</span>
       <span style={{ display: "flex", gap: "6px" }}>
         {tags.map((t) => (
-          <span key={t} style={{ padding: "3px 9px", borderRadius: "6px", fontSize: "0.75rem", background: "rgba(79,189,145,0.1)", color: "var(--cv-accent-text)", border: "1px solid rgba(79,189,145,0.2)" }}>
+          <span key={t} style={{ padding: "3px 9px", borderRadius: "6px", fontSize: "0.75rem", background: "rgba(109,145,245,0.1)", color: "var(--cv-accent-text)", border: "1px solid rgba(109,145,245,0.2)" }}>
             {t}
           </span>
         ))}
@@ -183,31 +183,31 @@ export default function HomePage() {
     },
     {
       icon: "🏆",
-      color: "rgba(79,189,145,0.12)",
+      color: "rgba(109,145,245,0.12)",
       title: "Weekly Contests",
       desc: "Compete globally in timed contests. Climb the leaderboard and earn exclusive badges.",
     },
     {
       icon: "🗺️",
-      color: "rgba(131,214,174,0.12)",
+      color: "rgba(155,180,255,0.12)",
       title: "Curated Roadmaps",
       desc: "Structured learning paths from Arrays to System Design, tailored for top tech interviews.",
     },
     {
       icon: "🤖",
-      color: "rgba(79,189,145,0.12)",
+      color: "rgba(109,145,245,0.12)",
       title: "AI Hints & Reviews",
       desc: "Get AI-powered hints without spoilers, and post-solve code reviews to level up fast.",
     },
     {
       icon: "📊",
-      color: "rgba(79,189,145,0.12)",
+      color: "rgba(109,145,245,0.12)",
       title: "Deep Analytics",
       desc: "Track your progress, time complexity trends, and weak areas with beautiful dashboards.",
     },
     {
       icon: "👥",
-      color: "rgba(79,189,145,0.12)",
+      color: "rgba(109,145,245,0.12)",
       title: "Discussion Forums",
       desc: "Discuss solutions, share approaches, and learn different perspectives from the community.",
     },
@@ -276,8 +276,8 @@ export default function HomePage() {
                 alignItems: "center",
                 gap: "8px",
                 padding: "7px 16px",
-                background: "rgba(79,189,145,0.1)",
-                border: "1px solid rgba(79,189,145,0.3)",
+                background: "rgba(109,145,245,0.1)",
+                border: "1px solid rgba(109,145,245,0.3)",
                 borderRadius: "100px",
                 marginBottom: "28px",
                 fontSize: "0.82rem",
@@ -352,7 +352,7 @@ export default function HomePage() {
                   position: "absolute",
                   inset: "-2px",
                   borderRadius: "14px",
-                  background: "linear-gradient(135deg, rgba(79,189,145,0.38), rgba(131,214,174,0.3))",
+                  background: "linear-gradient(135deg, rgba(109,145,245,0.22), rgba(155,180,255,0.16))",
                   filter: "blur(1px)",
                   zIndex: -1,
                 }}
@@ -364,13 +364,13 @@ export default function HomePage() {
                   position: "absolute",
                   bottom: "-20px",
                   right: "-20px",
-                  background: "linear-gradient(135deg, #4fbd91, #287b5a)",
+                  background: "linear-gradient(135deg, #6d91f5, #365fc7)",
                   borderRadius: "12px",
                   padding: "10px 16px",
                   fontSize: "0.82rem",
                   fontWeight: "700",
                   color: "white",
-                  boxShadow: "0 0 20px rgba(79,189,145,0.38)",
+                  boxShadow: "0 8px 22px rgba(54,95,199,0.26)",
                   display: "flex",
                   alignItems: "center",
                   gap: "8px",
@@ -384,7 +384,7 @@ export default function HomePage() {
       </section>
 
       {/* ─── Stats Section ─── */}
-      <section style={{ padding: "80px 24px", borderTop: "1px solid rgba(79,189,145,0.08)", borderBottom: "1px solid rgba(79,189,145,0.08)", background: "var(--cv-section-alt)" }}>
+      <section style={{ padding: "80px 24px", borderTop: "1px solid rgba(109,145,245,0.08)", borderBottom: "1px solid rgba(109,145,245,0.08)", background: "var(--cv-section-alt)" }}>
         <div style={{ maxWidth: "1000px", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "24px" }}>
           {stats.map((s) => (
             <div key={s.label} className="stat-card">
@@ -416,7 +416,7 @@ export default function HomePage() {
 
           <div className="glass-card" style={{ overflow: "hidden" }}>
             {/* Table Header */}
-            <div style={{ display: "flex", gap: "16px", padding: "12px 20px", borderBottom: "1px solid rgba(79,189,145,0.12)", background: "rgba(79,189,145,0.04)" }}>
+            <div style={{ display: "flex", gap: "16px", padding: "12px 20px", borderBottom: "1px solid rgba(109,145,245,0.12)", background: "rgba(109,145,245,0.04)" }}>
               <span style={{ color: "var(--cv-text-muted)", fontSize: "0.8rem", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.08em", minWidth: "36px" }}>#</span>
               <span style={{ color: "var(--cv-text-muted)", fontSize: "0.8rem", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.08em", flex: 1 }}>Title</span>
               <span style={{ color: "var(--cv-text-muted)", fontSize: "0.8rem", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.08em" }}>Tags</span>
@@ -454,7 +454,7 @@ export default function HomePage() {
       </section>
 
       {/* ─── Features Section ─── */}
-      <section style={{ padding: "100px 24px", background: "var(--cv-section-alt)", borderTop: "1px solid rgba(79,189,145,0.08)" }}>
+      <section style={{ padding: "100px 24px", background: "var(--cv-section-alt)", borderTop: "1px solid rgba(109,145,245,0.08)" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: "64px" }}>
             <p style={{ color: "var(--cv-accent-text)", fontWeight: "600", fontSize: "0.85rem", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "12px" }}>Why Code Vita</p>
@@ -490,7 +490,7 @@ export default function HomePage() {
                   "{t.text}"
                 </p>
                 <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "rgba(79,189,145,0.2)", border: "1px solid rgba(79,189,145,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.2rem" }}>
+                  <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "rgba(109,145,245,0.2)", border: "1px solid rgba(109,145,245,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.2rem" }}>
                     {t.avatar}
                   </div>
                   <div>
@@ -505,7 +505,7 @@ export default function HomePage() {
       </section>
 
       {/* ─── FAQ Section ─── */}
-      <section id="faq" style={{ padding: "100px 24px", background: "var(--cv-section-alt)", borderTop: "1px solid rgba(79,189,145,0.08)" }}>
+      <section id="faq" style={{ padding: "100px 24px", background: "var(--cv-section-alt)", borderTop: "1px solid rgba(109,145,245,0.08)" }}>
         <div style={{ maxWidth: "900px", margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: "48px" }}>
             <p style={{ color: "var(--cv-accent-text)", fontWeight: "600", fontSize: "0.85rem", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "12px" }}>FAQ</p>
@@ -523,7 +523,7 @@ export default function HomePage() {
           padding: "100px 24px",
           textAlign: "center",
           position: "relative",
-          borderTop: "1px solid rgba(79,189,145,0.1)",
+          borderTop: "1px solid rgba(109,145,245,0.1)",
         }}
       >
         <div className="orb orb-purple" style={{ width: "600px", height: "600px", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }} />
@@ -546,10 +546,10 @@ export default function HomePage() {
       </section>
 
       {/* ─── Footer ─── */}
-      <footer style={{ padding: "40px 24px", borderTop: "1px solid rgba(79,189,145,0.1)", background: "var(--cv-footer-bg)" }}>
+      <footer style={{ padding: "40px 24px", borderTop: "1px solid rgba(109,145,245,0.1)", background: "var(--cv-footer-bg)" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <div style={{ width: "28px", height: "28px", borderRadius: "7px", background: "linear-gradient(135deg, #4fbd91, #83d6ae)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontFamily: "var(--font-mono)", fontWeight: "700", color: "white" }}>
+            <div style={{ width: "28px", height: "28px", borderRadius: "7px", background: "linear-gradient(135deg, #6d91f5, #9bb4ff)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontFamily: "var(--font-mono)", fontWeight: "700", color: "white" }}>
               {"</>"}
             </div>
             <span style={{ fontWeight: "700", fontSize: "0.95rem" }}>Code Vita</span>
