@@ -86,7 +86,7 @@
   place-items: center;
   border-radius: 13px;
   color: var(--cv-accent-text);
-  background: rgba(79, 189, 145, 0.13);
+  background: rgba(109, 145, 245, 0.13);
   font-size: 1.4rem;
 }
 
@@ -146,7 +146,7 @@
 .reflection-field input:focus,
 .reflection-field textarea:focus {
   border-color: var(--cv-accent);
-  box-shadow: 0 0 0 3px rgba(79, 189, 145, 0.13);
+  box-shadow: 0 0 0 3px rgba(109, 145, 245, 0.13);
 }
 
 .reflection-field textarea {
@@ -246,7 +246,7 @@
 
 .review-filters button.is-active {
   color: var(--cv-accent-text);
-  background: rgba(79, 189, 145, 0.12);
+  background: rgba(109, 145, 245, 0.12);
 }
 
 .review-filters button span {
@@ -413,7 +413,7 @@
 
 .review-done-button:hover {
   border-color: var(--cv-accent);
-  background: rgba(79, 189, 145, 0.1);
+  background: rgba(109, 145, 245, 0.1);
 }
 
 .review-interval-hint {

@@ -10,8 +10,8 @@
 
 .scroll-progress__bar {
   height: 100%;
-  background: linear-gradient(90deg, #4fbd91, #a2e8c5);
-  box-shadow: 0 0 10px rgba(79, 189, 145, 0.6);
+  background: linear-gradient(90deg, #6d91f5, #c0d0ff);
+  box-shadow: 0 0 8px rgba(109, 145, 245, 0.35);
   transform-origin: left center;
   transform: scaleX(0);
   will-change: transform;
