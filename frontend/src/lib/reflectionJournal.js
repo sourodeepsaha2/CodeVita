@@ -1,4 +1,6 @@
 const STORAGE_KEY = "code-vita-reflection-journal";
+const BACKUP_FORMAT = "code-vita-reflection-journal";
+const BACKUP_VERSION = 1;
 
 const REVIEW_INTERVAL_DAYS = [1, 2, 4, 7, 14];
 
@@ -31,6 +33,53 @@ export function saveReflections(reflections) {
   } catch {
     return false;
   }
+}
+
+export function createReflectionBackup(reflections) {
+  return JSON.stringify({
+    format: BACKUP_FORMAT,
+    version: BACKUP_VERSION,
+    exportedAt: new Date().toISOString(),
+    reflections,
+  }, null, 2);
+}
+
+export function parseReflectionBackup(contents) {
+  let backup;
+  try {
+    backup = JSON.parse(contents);
+  } catch {
+    throw new Error("This file isn’t valid JSON.");
+  }
+
+  if (!backup || backup.format !== BACKUP_FORMAT) {
+    throw new Error("This file isn’t a Code Vita journal backup.");
+  }
+  if (backup.version !== BACKUP_VERSION) {
+    throw new Error("This journal backup uses an unsupported format version.");
+  }
+  if (!Array.isArray(backup.reflections)) {
+    throw new Error("This journal backup doesn’t contain a valid entry list.");
+  }
+
+  const validDate = (value) => typeof value === "string" && !Number.isNaN(Date.parse(value));
+  const validReflections = backup.reflections.every((item) =>
+    item &&
+    typeof item.id === "string" && item.id.length > 0 &&
+    typeof item.problem === "string" && item.problem.trim().length > 0 &&
+    typeof item.approach === "string" && item.approach.trim().length > 0 &&
+    typeof item.blocker === "string" &&
+    Number.isInteger(item.confidence) && item.confidence >= 1 && item.confidence <= 5 &&
+    validDate(item.createdAt) && validDate(item.nextReviewAt) &&
+    Number.isInteger(item.reviewCount) && item.reviewCount >= 0 &&
+    (item.lastReviewedAt === undefined || validDate(item.lastReviewedAt))
+  );
+
+  if (!validReflections) {
+    throw new Error("One or more journal entries are incomplete or invalid.");
+  }
+
+  return backup.reflections;
 }
 
 export function createReflection({ problem, approach, blocker, confidence }) {
