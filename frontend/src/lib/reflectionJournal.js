@@ -58,22 +58,26 @@ export function parseReflectionBackup(contents) {
   if (backup.version !== BACKUP_VERSION) {
     throw new Error("This journal backup uses an unsupported format version.");
   }
+  if (typeof backup.exportedAt !== "string" || Number.isNaN(Date.parse(backup.exportedAt))) {
+    throw new Error("This journal backup is missing a valid export date.");
+  }
   if (!Array.isArray(backup.reflections)) {
     throw new Error("This journal backup doesn’t contain a valid entry list.");
   }
 
   const validDate = (value) => typeof value === "string" && !Number.isNaN(Date.parse(value));
-  const validReflections = backup.reflections.every((item) =>
-    item &&
-    typeof item.id === "string" && item.id.length > 0 &&
-    typeof item.problem === "string" && item.problem.trim().length > 0 &&
-    typeof item.approach === "string" && item.approach.trim().length > 0 &&
-    typeof item.blocker === "string" &&
-    Number.isInteger(item.confidence) && item.confidence >= 1 && item.confidence <= 5 &&
-    validDate(item.createdAt) && validDate(item.nextReviewAt) &&
-    Number.isInteger(item.reviewCount) && item.reviewCount >= 0 &&
-    (item.lastReviewedAt === undefined || validDate(item.lastReviewedAt))
-  );
+  const seenIds = new Set();
+  const validReflections = backup.reflections.every((item) => {
+    if (!item || typeof item.id !== "string" || item.id.length === 0 || seenIds.has(item.id)) return false;
+    seenIds.add(item.id);
+    return typeof item.problem === "string" && item.problem.trim().length > 0 &&
+      typeof item.approach === "string" && item.approach.trim().length > 0 &&
+      typeof item.blocker === "string" &&
+      Number.isInteger(item.confidence) && item.confidence >= 1 && item.confidence <= 5 &&
+      validDate(item.createdAt) && validDate(item.nextReviewAt) &&
+      Number.isInteger(item.reviewCount) && item.reviewCount >= 0 &&
+      (item.lastReviewedAt === undefined || validDate(item.lastReviewedAt));
+  });
 
   if (!validReflections) {
     throw new Error("One or more journal entries are incomplete or invalid.");

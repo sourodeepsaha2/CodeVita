@@ -58,7 +58,7 @@ export default function ReviewPage() {
     link.href = url;
     link.download = `code-vita-journal-${new Date().toISOString().slice(0, 10)}.json`;
     link.click();
-    URL.revokeObjectURL(url);
+    window.setTimeout(() => URL.revokeObjectURL(url), 0);
     setBackupMessage("Journal backup downloaded.");
   };
 
@@ -71,10 +71,13 @@ export default function ReviewPage() {
       const imported = parseReflectionBackup(await file.text());
       const current = loadReflections();
       const existingIds = new Set(current.map((reflection) => reflection.id));
-      const additions = imported.filter((reflection) => !existingIds.has(reflection.id));
+      const additions = imported.filter((reflection) => {
+        if (existingIds.has(reflection.id)) return false;
+        existingIds.add(reflection.id);
+        return true;
+      });
       const next = [...current, ...additions];
       if (!saveReflections(next)) {
-        setStorageError(true);
         setBackupMessage("Your browser couldn’t save the imported journal.");
         return;
       }
