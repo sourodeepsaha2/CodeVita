@@ -26,6 +26,46 @@
   line-height: 1.6;
 }
 
+.journal-backup {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px 24px;
+  margin-bottom: 24px;
+  padding: 18px 20px;
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius);
+  background: var(--cv-surface-alpha);
+}
+
+.journal-backup h2 {
+  margin-bottom: 5px;
+  font-size: 0.95rem;
+}
+
+.journal-backup > div:first-child p {
+  color: var(--cv-text-muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.journal-backup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.journal-backup-actions .btn-outline-cv {
+  padding: 9px 13px;
+  font-size: 0.78rem;
+}
+
+.journal-backup-message {
+  grid-column: 1 / -1;
+  color: var(--cv-accent-text);
+  font-size: 0.78rem;
+}
+
 .review-summary-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -431,6 +471,16 @@
 
   .reflection-form-card {
     padding: 20px 16px;
+  }
+
+  .journal-backup {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 16px;
+  }
+
+  .journal-backup-actions > button {
+    flex: 1;
   }
 
   .review-list-heading {

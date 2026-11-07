@@ -115,7 +115,7 @@ export default function ReviewPage() {
         <div className="journal-backup-actions">
           <button type="button" className="btn-outline-cv" onClick={exportBackup}>Download backup</button>
           <button type="button" className="btn-outline-cv" onClick={() => backupInputRef.current?.click()}>Import backup</button>
-          <input ref={backupInputRef} className="sr-only" type="file" accept=".json,application/json" onChange={importBackup} aria-label="Choose a Code Vita journal backup" />
+          <input ref={backupInputRef} type="file" accept=".json,application/json" onChange={importBackup} aria-label="Choose a Code Vita journal backup" hidden />
         </div>
         {backupMessage && <p className="journal-backup-message" role="status">{backupMessage}</p>}
       </section>
