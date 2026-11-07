@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
-import { createReflection, loadReflections, saveReflections, scheduleReflectionReview, getReviewIntervalDays } from "../lib/reflectionJournal";
+import { createReflection, loadReflections, saveReflections, scheduleReflectionReview, getReviewIntervalDays, createReflectionBackup, parseReflectionBackup } from "../lib/reflectionJournal";
 import "./ReviewPage.css";
 
 export default function ReviewPage() {
@@ -8,6 +8,8 @@ export default function ReviewPage() {
   const [reflections, setReflections] = useState([]);
   const [storageError, setStorageError] = useState(false);
   const [queueFilter, setQueueFilter] = useState("all");
+  const [backupMessage, setBackupMessage] = useState("");
+  const backupInputRef = useRef(null);
 
   useEffect(() => {
     const refresh = () => setReflections(loadReflections());
@@ -49,6 +51,43 @@ export default function ReviewPage() {
     setReflections(next);
   };
 
+  const exportBackup = () => {
+    const blob = new Blob([createReflectionBackup(loadReflections())], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `code-vita-journal-${new Date().toISOString().slice(0, 10)}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+    setBackupMessage("Journal backup downloaded.");
+  };
+
+  const importBackup = async (event) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+
+    try {
+      const imported = parseReflectionBackup(await file.text());
+      const current = loadReflections();
+      const existingIds = new Set(current.map((reflection) => reflection.id));
+      const additions = imported.filter((reflection) => !existingIds.has(reflection.id));
+      const next = [...current, ...additions];
+      if (!saveReflections(next)) {
+        setStorageError(true);
+        setBackupMessage("Your browser couldn’t save the imported journal.");
+        return;
+      }
+      setStorageError(false);
+      setReflections(next);
+      setBackupMessage(additions.length
+        ? `Imported ${additions.length} ${additions.length === 1 ? "entry" : "entries"}. Existing entries were kept.`
+        : "This backup has no new entries. Your journal is unchanged.");
+    } catch (error) {
+      setBackupMessage(error instanceof Error ? error.message : "Couldn’t import this journal backup.");
+    }
+  };
+
   const visibleReflections = reflections
     .filter((reflection) => {
       const due = new Date(reflection.nextReviewAt) <= new Date();
@@ -65,6 +104,18 @@ export default function ReviewPage() {
         <h1>Your reflection journal</h1>
         <p>Save the thinking behind a solution and give yourself a date to revisit it.</p>
       </header>
+      <section className="journal-backup" aria-label="Journal backup">
+        <div>
+          <h2>Keep a copy of your journal</h2>
+          <p>Export your entries or restore them from a Code Vita backup.</p>
+        </div>
+        <div className="journal-backup-actions">
+          <button type="button" className="btn-outline-cv" onClick={exportBackup}>Download backup</button>
+          <button type="button" className="btn-outline-cv" onClick={() => backupInputRef.current?.click()}>Import backup</button>
+          <input ref={backupInputRef} className="sr-only" type="file" accept=".json,application/json" onChange={importBackup} aria-label="Choose a Code Vita journal backup" />
+        </div>
+        {backupMessage && <p className="journal-backup-message" role="status">{backupMessage}</p>}
+      </section>
       <section className="review-summary-grid" aria-label="Journal progress">
         <div className="review-summary-card"><span>IN YOUR JOURNAL</span><strong>{reflections.length}</strong><small>{reflections.length === 1 ? "problem" : "problems"} captured</small></div>
         <div className={`review-summary-card${dueCount ? " has-due" : ""}`}><span>READY TO REVISIT</span><strong>{dueCount}</strong><small>{dueCount === 1 ? "review is due" : "reviews are due"}</small></div>
