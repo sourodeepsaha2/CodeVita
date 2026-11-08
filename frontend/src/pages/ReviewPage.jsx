@@ -8,6 +8,7 @@ export default function ReviewPage() {
   const [reflections, setReflections] = useState([]);
   const [storageError, setStorageError] = useState(false);
   const [queueFilter, setQueueFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [backupMessage, setBackupMessage] = useState("");
   const backupInputRef = useRef(null);
@@ -106,7 +107,12 @@ export default function ReviewPage() {
     }
   };
 
+  const normalizedQuery = searchQuery.trim().toLocaleLowerCase();
   const visibleReflections = reflections
+    .filter((reflection) => !normalizedQuery ||
+      [reflection.problem, reflection.approach, reflection.blocker]
+        .some((value) => value.toLocaleLowerCase().includes(normalizedQuery))
+    )
     .filter((reflection) => {
       const due = new Date(reflection.nextReviewAt) <= new Date();
       return queueFilter === "all" || (queueFilter === "due" ? due : !due);
@@ -154,14 +160,20 @@ export default function ReviewPage() {
         <div className="review-list-heading">
           <div>
             <p className="review-eyebrow">YOUR PRACTICE</p>
-            <h2 id="review-list-title">Review queue <span>{reflections.length}</span></h2>
+            <h2 id="review-list-title">Review queue <span>{normalizedQuery ? `${visibleReflections.length}/${reflections.length}` : reflections.length}</span></h2>
           </div>
-          <div className="review-filters" role="group" aria-label="Filter review queue">
-            {[{ id: "all", label: "All" }, { id: "due", label: "Due" }, { id: "upcoming", label: "Upcoming" }].map((filter) => (
-              <button key={filter.id} type="button" className={queueFilter === filter.id ? "is-active" : ""} aria-pressed={queueFilter === filter.id} onClick={() => setQueueFilter(filter.id)}>
-                {filter.label}{filter.id === "due" && <span>{reflections.filter((item) => new Date(item.nextReviewAt) <= new Date()).length}</span>}
-              </button>
-            ))}
+          <div className="review-list-tools">
+            <label className="review-search">
+              <span className="sr-only">Search journal entries</span>
+              <input type="search" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="Search problems and notes" />
+            </label>
+            <div className="review-filters" role="group" aria-label="Filter review queue">
+              {[{ id: "all", label: "All" }, { id: "due", label: "Due" }, { id: "upcoming", label: "Upcoming" }].map((filter) => (
+                <button key={filter.id} type="button" className={queueFilter === filter.id ? "is-active" : ""} aria-pressed={queueFilter === filter.id} onClick={() => setQueueFilter(filter.id)}>
+                  {filter.label}{filter.id === "due" && <span>{reflections.filter((item) => new Date(item.nextReviewAt) <= new Date()).length}</span>}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
         {reflections.length === 0 ? (
@@ -211,7 +223,11 @@ export default function ReviewPage() {
             })}
           </div>
         ) : (
-          <div className="review-filter-empty glass-card">No {queueFilter === "due" ? "reviews are due" : "upcoming reviews"} in this view.</div>
+          <div className="review-filter-empty glass-card">
+            {normalizedQuery
+              ? `No journal entries match “${searchQuery.trim()}” in this view.`
+              : `No ${queueFilter === "due" ? "reviews are due" : "upcoming reviews"} in this view.`}
+          </div>
         )}
       </section>
     </main>
