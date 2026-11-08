@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
-import { createReflection, loadReflections, saveReflections, scheduleReflectionReview, getReviewIntervalDays, createReflectionBackup, parseReflectionBackup } from "../lib/reflectionJournal";
+import { createReflection, loadReflections, saveReflections, scheduleReflectionReview, getReviewIntervalDays, createReflectionBackup, parseReflectionBackup, updateReflection } from "../lib/reflectionJournal";
 import "./ReviewPage.css";
 
 export default function ReviewPage() {
@@ -8,6 +8,7 @@ export default function ReviewPage() {
   const [reflections, setReflections] = useState([]);
   const [storageError, setStorageError] = useState(false);
   const [queueFilter, setQueueFilter] = useState("all");
+  const [editingId, setEditingId] = useState(null);
   const [backupMessage, setBackupMessage] = useState("");
   const backupInputRef = useRef(null);
 
@@ -49,6 +50,20 @@ export default function ReviewPage() {
     }
     setStorageError(false);
     setReflections(next);
+  };
+
+  const saveEditedReflection = (id, values) => {
+    const next = loadReflections().map((reflection) =>
+      reflection.id === id ? updateReflection(reflection, values) : reflection
+    );
+    if (!saveReflections(next)) {
+      setStorageError(true);
+      return false;
+    }
+    setStorageError(false);
+    setReflections(next);
+    setEditingId(null);
+    return true;
   };
 
   const exportBackup = () => {
@@ -161,25 +176,36 @@ export default function ReviewPage() {
               const due = new Date(reflection.nextReviewAt) <= new Date();
               return (
                 <article className={`reflection-entry glass-card${due ? " is-due" : ""}`} key={reflection.id}>
-                  <div className="reflection-entry-topline">
-                    <h3>{reflection.problem}</h3>
-                    <div className="reflection-entry-actions">
-                      <span className={`reflection-due-pill${due ? " is-due" : ""}`}>{due ? "Due to review" : `Review ${formatReviewDate(reflection.nextReviewAt)}`}</span>
-                      <button type="button" className="reflection-delete-button" onClick={() => removeReflection(reflection.id)} aria-label={`Delete reflection for ${reflection.problem}`} title="Delete reflection">×</button>
-                    </div>
-                  </div>
-                  <div className="reflection-entry-notes">
-                    <div><span>APPROACH</span><p>{reflection.approach}</p></div>
-                    {reflection.blocker && <div><span>STUCK ON</span><p>{reflection.blocker}</p></div>}
-                  </div>
-                  <div className="reflection-entry-meta">
-                    <span>Confidence <strong>{reflection.confidence}/5</strong></span>
-                    <span>{reflection.reviewCount ? `Reviewed ${reflection.reviewCount} ${reflection.reviewCount === 1 ? "time" : "times"}` : "First review"}</span>
-                    <button type="button" className="review-done-button" onClick={() => markReviewed(reflection.id)}>
-                      I reviewed this <span aria-hidden="true">→</span>
-                    </button>
-                  </div>
-                  <p className="review-interval-hint">After reviewing, it returns in {getReviewIntervalDays(reflection.confidence)} {getReviewIntervalDays(reflection.confidence) === 1 ? "day" : "days"} based on your confidence.</p>
+                  {editingId === reflection.id ? (
+                    <ReflectionEditor
+                      reflection={reflection}
+                      onCancel={() => setEditingId(null)}
+                      onSave={(values) => saveEditedReflection(reflection.id, values)}
+                    />
+                  ) : (
+                    <>
+                      <div className="reflection-entry-topline">
+                        <h3>{reflection.problem}</h3>
+                        <div className="reflection-entry-actions">
+                          <span className={`reflection-due-pill${due ? " is-due" : ""}`}>{due ? "Due to review" : `Review ${formatReviewDate(reflection.nextReviewAt)}`}</span>
+                          <button type="button" className="reflection-edit-button" onClick={() => setEditingId(reflection.id)} aria-label={`Edit reflection for ${reflection.problem}`}>Edit</button>
+                          <button type="button" className="reflection-delete-button" onClick={() => removeReflection(reflection.id)} aria-label={`Delete reflection for ${reflection.problem}`} title="Delete reflection">×</button>
+                        </div>
+                      </div>
+                      <div className="reflection-entry-notes">
+                        <div><span>APPROACH</span><p>{reflection.approach}</p></div>
+                        {reflection.blocker && <div><span>STUCK ON</span><p>{reflection.blocker}</p></div>}
+                      </div>
+                      <div className="reflection-entry-meta">
+                        <span>Confidence <strong>{reflection.confidence}/5</strong></span>
+                        <span>{reflection.reviewCount ? `Reviewed ${reflection.reviewCount} ${reflection.reviewCount === 1 ? "time" : "times"}` : "First review"}</span>
+                        <button type="button" className="review-done-button" onClick={() => markReviewed(reflection.id)}>
+                          I reviewed this <span aria-hidden="true">→</span>
+                        </button>
+                      </div>
+                      <p className="review-interval-hint">After reviewing, it returns in {getReviewIntervalDays(reflection.confidence)} {getReviewIntervalDays(reflection.confidence) === 1 ? "day" : "days"} based on your confidence.</p>
+                    </>
+                  )}
                 </article>
               );
             })}
@@ -194,6 +220,54 @@ export default function ReviewPage() {
 
 function formatReviewDate(value) {
   return new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric" }).format(new Date(value));
+}
+
+function ReflectionEditor({ reflection, onSave, onCancel }) {
+  const [values, setValues] = useState({
+    problem: reflection.problem,
+    approach: reflection.approach,
+    blocker: reflection.blocker,
+  });
+  const [errors, setErrors] = useState({});
+
+  const update = (field) => (event) => {
+    setValues((current) => ({ ...current, [field]: event.target.value }));
+    setErrors((current) => ({ ...current, [field]: "", save: "" }));
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const nextErrors = {};
+    if (!values.problem.trim()) nextErrors.problem = "Add the problem name.";
+    if (!values.approach.trim()) nextErrors.approach = "Describe the approach you tried.";
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length) return;
+    if (!onSave(values)) setErrors((current) => ({ ...current, save: "Couldn’t save changes. Check available browser storage and try again." }));
+  };
+
+  return (
+    <form className="reflection-editor" onSubmit={handleSubmit} noValidate>
+      <label className="reflection-field">
+        <span>Problem name <b aria-hidden="true">*</b></span>
+        <input value={values.problem} onChange={update("problem")} aria-invalid={Boolean(errors.problem)} />
+        {errors.problem && <small role="alert">{errors.problem}</small>}
+      </label>
+      <label className="reflection-field">
+        <span>Approach <b aria-hidden="true">*</b></span>
+        <textarea value={values.approach} onChange={update("approach")} rows="3" aria-invalid={Boolean(errors.approach)} />
+        {errors.approach && <small role="alert">{errors.approach}</small>}
+      </label>
+      <label className="reflection-field">
+        <span>Where did you get stuck? <em>Optional</em></span>
+        <textarea value={values.blocker} onChange={update("blocker")} rows="2" />
+      </label>
+      {errors.save && <p className="reflection-storage-error" role="alert">{errors.save}</p>}
+      <div className="reflection-editor-actions">
+        <button type="button" className="btn-outline-cv" onClick={onCancel}>Cancel</button>
+        <button type="submit" className="btn-primary-cv">Save changes</button>
+      </div>
+    </form>
+  );
 }
 
 function ReflectionForm({ onAdd }) {

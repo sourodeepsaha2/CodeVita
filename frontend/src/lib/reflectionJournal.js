@@ -99,6 +99,15 @@ export function createReflection({ problem, approach, blocker, confidence }) {
   };
 }
 
+export function updateReflection(reflection, { problem, approach, blocker }) {
+  return {
+    ...reflection,
+    problem: problem.trim(),
+    approach: approach.trim(),
+    blocker: blocker.trim(),
+  };
+}
+
 export function scheduleReflectionReview(reflection, confidence) {
   return {
     ...reflection,
