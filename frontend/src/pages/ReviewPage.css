@@ -367,6 +367,43 @@
   gap: 8px;
 }
 
+.reflection-edit-button {
+  padding: 5px 8px;
+  border: 1px solid var(--cv-border);
+  border-radius: 7px;
+  color: var(--cv-text-2);
+  background: var(--cv-surface-alpha);
+  font: inherit;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.reflection-edit-button:hover {
+  border-color: var(--cv-accent);
+  color: var(--cv-accent-text);
+  background: var(--cv-surface-2);
+}
+
+.reflection-editor {
+  display: grid;
+  gap: 14px;
+}
+
+.reflection-editor-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.reflection-editor-actions .btn-primary-cv,
+.reflection-editor-actions .btn-outline-cv {
+  min-height: 38px;
+  padding: 0 14px;
+  font-size: 0.78rem;
+}
+
 .reflection-delete-button {
   width: 28px;
   height: 28px;
@@ -508,6 +545,10 @@
   .reflection-entry-actions {
     width: 100%;
     justify-content: space-between;
+  }
+
+  .reflection-editor-actions > button {
+    flex: 1;
   }
 
   .reflection-entry-notes {
