@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
-import { createReflection, loadReflections, saveReflections, scheduleReflectionReview, getReviewIntervalDays, createReflectionBackup, parseReflectionBackup, updateReflection } from "../lib/reflectionJournal";
+import { createReflection, loadReflections, saveReflections, scheduleReflectionReview, getReviewIntervalDays, createReflectionBackup, parseReflectionBackup, updateReflection, setReflectionFavorite } from "../lib/reflectionJournal";
 import "./ReviewPage.css";
 
 export default function ReviewPage() {
@@ -45,6 +45,22 @@ export default function ReviewPage() {
 
   const removeReflection = (id) => {
     const next = loadReflections().filter((reflection) => reflection.id !== id);
+    if (!saveReflections(next)) {
+      setStorageError(true);
+      return;
+    }
+    setStorageError(false);
+    setReflections(next);
+  };
+
+  const toggleFavorite = (id) => {
+    const current = loadReflections();
+    const reflection = current.find((entry) => entry.id === id);
+    if (!reflection) return;
+    const next = current.map((entry) => entry.id === id
+      ? setReflectionFavorite(entry, !entry.isFavorite)
+      : entry
+    );
     if (!saveReflections(next)) {
       setStorageError(true);
       return;
@@ -200,6 +216,16 @@ export default function ReviewPage() {
                         <h3>{reflection.problem}</h3>
                         <div className="reflection-entry-actions">
                           <span className={`reflection-due-pill${due ? " is-due" : ""}`}>{due ? "Due to review" : `Review ${formatReviewDate(reflection.nextReviewAt)}`}</span>
+                          <button
+                            type="button"
+                            className={`reflection-favorite-button${reflection.isFavorite ? " is-favorite" : ""}`}
+                            aria-pressed={Boolean(reflection.isFavorite)}
+                            aria-label={`${reflection.isFavorite ? "Remove" : "Add"} ${reflection.problem} ${reflection.isFavorite ? "from" : "to"} saved entries`}
+                            title={reflection.isFavorite ? "Remove from saved entries" : "Save this reflection"}
+                            onClick={() => toggleFavorite(reflection.id)}
+                          >
+                            <span aria-hidden="true">{reflection.isFavorite ? "★" : "☆"}</span>
+                          </button>
                           <button type="button" className="reflection-edit-button" onClick={() => setEditingId(reflection.id)} aria-label={`Edit reflection for ${reflection.problem}`}>Edit</button>
                           <button type="button" className="reflection-delete-button" onClick={() => removeReflection(reflection.id)} aria-label={`Delete reflection for ${reflection.problem}`} title="Delete reflection">×</button>
                         </div>
