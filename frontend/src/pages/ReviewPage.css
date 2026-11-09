@@ -398,6 +398,34 @@
   gap: 8px;
 }
 
+.reflection-favorite-button {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  place-items: center;
+  border: 1px solid var(--cv-border);
+  border-radius: 7px;
+  color: var(--cv-text-muted);
+  background: var(--cv-surface-alpha);
+  font: 1rem/1 var(--font-sans);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s, transform 0.2s;
+}
+
+.reflection-favorite-button:hover {
+  border-color: var(--cv-accent);
+  color: var(--cv-accent-text);
+  background: rgba(109, 145, 245, 0.08);
+  transform: translateY(-1px);
+}
+
+.reflection-favorite-button.is-favorite {
+  border-color: rgba(109, 145, 245, 0.3);
+  color: var(--cv-accent-text);
+  background: rgba(109, 145, 245, 0.12);
+}
+
 .reflection-edit-button {
   padding: 5px 8px;
   border: 1px solid var(--cv-border);
