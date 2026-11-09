@@ -130,8 +130,10 @@ export default function ReviewPage() {
         .some((value) => value.toLocaleLowerCase().includes(normalizedQuery))
     )
     .filter((reflection) => {
+      if (queueFilter === "all") return true;
+      if (queueFilter === "saved") return Boolean(reflection.isFavorite);
       const due = new Date(reflection.nextReviewAt) <= new Date();
-      return queueFilter === "all" || (queueFilter === "due" ? due : !due);
+      return queueFilter === "due" ? due : !due;
     })
     .sort((a, b) => new Date(a.nextReviewAt) - new Date(b.nextReviewAt));
   const dueCount = reflections.filter((reflection) => new Date(reflection.nextReviewAt) <= new Date()).length;
@@ -184,9 +186,9 @@ export default function ReviewPage() {
               <input type="search" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="Search problems and notes" />
             </label>
             <div className="review-filters" role="group" aria-label="Filter review queue">
-              {[{ id: "all", label: "All" }, { id: "due", label: "Due" }, { id: "upcoming", label: "Upcoming" }].map((filter) => (
+              {[{ id: "all", label: "All" }, { id: "due", label: "Due" }, { id: "upcoming", label: "Upcoming" }, { id: "saved", label: "Saved" }].map((filter) => (
                 <button key={filter.id} type="button" className={queueFilter === filter.id ? "is-active" : ""} aria-pressed={queueFilter === filter.id} onClick={() => setQueueFilter(filter.id)}>
-                  {filter.label}{filter.id === "due" && <span>{reflections.filter((item) => new Date(item.nextReviewAt) <= new Date()).length}</span>}
+                  {filter.label}{filter.id === "due" && <span>{dueCount}</span>}{filter.id === "saved" && <span>{reflections.filter((item) => item.isFavorite).length}</span>}
                 </button>
               ))}
             </div>
@@ -252,7 +254,9 @@ export default function ReviewPage() {
           <div className="review-filter-empty glass-card">
             {normalizedQuery
               ? `No journal entries match “${searchQuery.trim()}” in this view.`
-              : `No ${queueFilter === "due" ? "reviews are due" : "upcoming reviews"} in this view.`}
+              : queueFilter === "saved"
+                ? "No saved reflections yet. Use the star on a reflection to keep it here."
+                : `No ${queueFilter === "due" ? "reviews are due" : "upcoming reviews"} in this view.`}
           </div>
         )}
       </section>
