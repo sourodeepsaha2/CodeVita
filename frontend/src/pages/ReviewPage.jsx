@@ -11,6 +11,7 @@ export default function ReviewPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [backupMessage, setBackupMessage] = useState("");
+  const [favoriteMessage, setFavoriteMessage] = useState("");
   const backupInputRef = useRef(null);
 
   useEffect(() => {
@@ -63,10 +64,12 @@ export default function ReviewPage() {
     );
     if (!saveReflections(next)) {
       setStorageError(true);
+      setFavoriteMessage("Your browser couldn’t save this favorite. Check available storage and try again.");
       return;
     }
     setStorageError(false);
     setReflections(next);
+    setFavoriteMessage(`${reflection.problem} ${reflection.isFavorite ? "removed from" : "added to"} saved reflections.`);
   };
 
   const saveEditedReflection = (id, values) => {
@@ -194,6 +197,7 @@ export default function ReviewPage() {
             </div>
           </div>
         </div>
+        {favoriteMessage && <p className="review-favorite-status" role="status">{favoriteMessage}</p>}
         {reflections.length === 0 ? (
           <div className="review-empty glass-card">
             <span aria-hidden="true">📓</span>
