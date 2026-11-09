@@ -76,6 +76,7 @@ export function parseReflectionBackup(contents) {
       Number.isInteger(item.confidence) && item.confidence >= 1 && item.confidence <= 5 &&
       validDate(item.createdAt) && validDate(item.nextReviewAt) &&
       Number.isInteger(item.reviewCount) && item.reviewCount >= 0 &&
+      (item.isFavorite === undefined || typeof item.isFavorite === "boolean") &&
       (item.lastReviewedAt === undefined || validDate(item.lastReviewedAt));
   });
 
@@ -96,7 +97,12 @@ export function createReflection({ problem, approach, blocker, confidence }) {
     createdAt: new Date().toISOString(),
     nextReviewAt: getNextReviewAt(confidence),
     reviewCount: 0,
+    isFavorite: false,
   };
+}
+
+export function setReflectionFavorite(reflection, isFavorite) {
+  return { ...reflection, isFavorite: Boolean(isFavorite) };
 }
 
 export function updateReflection(reflection, { problem, approach, blocker }) {
