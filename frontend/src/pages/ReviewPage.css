@@ -598,13 +598,21 @@
   bottom: calc(100% + 8px);
   z-index: 5;
   display: grid;
-  min-width: 132px;
+  min-width: 196px;
   gap: 3px;
   padding: 5px;
   border: 1px solid var(--cv-border);
   border-radius: 10px;
   background: var(--cv-surface);
   box-shadow: var(--cv-glow-sm);
+}
+
+.review-snooze-menu p {
+  padding: 7px 9px 8px;
+  border-bottom: 1px solid var(--cv-border);
+  color: var(--cv-text-muted);
+  font-size: 0.67rem;
+  line-height: 1.45;
 }
 
 .review-snooze-menu button {

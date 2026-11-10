@@ -265,6 +265,7 @@ export default function ReviewPage() {
                           <details className="review-snooze">
                             <summary>Snooze</summary>
                             <div className="review-snooze-menu" role="group" aria-label={`Snooze ${reflection.problem}`}>
+                              <p>This moves the reminder without counting a review.</p>
                               {SNOOZE_OPTIONS.map((option) => (
                                 <button key={option.days} type="button" onClick={() => snoozeReview(reflection.id, option.days)}>
                                   {option.label}
