@@ -3,6 +3,11 @@ const BACKUP_FORMAT = "code-vita-reflection-journal";
 const BACKUP_VERSION = 1;
 
 const REVIEW_INTERVAL_DAYS = [1, 2, 4, 7, 14];
+export const SNOOZE_OPTIONS = [
+  { days: 1, label: "1 day" },
+  { days: 3, label: "3 days" },
+  { days: 7, label: "7 days" },
+];
 
 export function getReviewIntervalDays(confidence) {
   const score = Math.min(5, Math.max(1, Number(confidence) || 1));
@@ -122,4 +127,13 @@ export function scheduleReflectionReview(reflection, confidence) {
     reviewCount: reflection.reviewCount + 1,
     lastReviewedAt: new Date().toISOString(),
   };
+}
+
+export function snoozeReflectionReview(reflection, days, from = new Date()) {
+  if (!SNOOZE_OPTIONS.some((option) => option.days === days)) {
+    throw new RangeError("Choose a snooze period of 1, 3, or 7 days.");
+  }
+  const nextReview = new Date(from);
+  nextReview.setDate(nextReview.getDate() + days);
+  return { ...reflection, nextReviewAt: nextReview.toISOString() };
 }
