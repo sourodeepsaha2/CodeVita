@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
-import { createReflection, loadReflections, saveReflections, scheduleReflectionReview, getReviewIntervalDays, createReflectionBackup, parseReflectionBackup, updateReflection, setReflectionFavorite, snoozeReflectionReview } from "../lib/reflectionJournal";
+import { createReflection, loadReflections, saveReflections, scheduleReflectionReview, getReviewIntervalDays, createReflectionBackup, parseReflectionBackup, updateReflection, setReflectionFavorite, snoozeReflectionReview, SNOOZE_OPTIONS } from "../lib/reflectionJournal";
 import "./ReviewPage.css";
 
 export default function ReviewPage() {
@@ -255,6 +255,18 @@ export default function ReviewPage() {
                       <div className="reflection-entry-meta">
                         <span>Confidence <strong>{reflection.confidence}/5</strong></span>
                         <span>{reflection.reviewCount ? `Reviewed ${reflection.reviewCount} ${reflection.reviewCount === 1 ? "time" : "times"}` : "First review"}</span>
+                        {due && (
+                          <details className="review-snooze">
+                            <summary>Snooze</summary>
+                            <div className="review-snooze-menu" role="group" aria-label={`Snooze ${reflection.problem}`}>
+                              {SNOOZE_OPTIONS.map((option) => (
+                                <button key={option.days} type="button" onClick={() => snoozeReview(reflection.id, option.days)}>
+                                  {option.label}
+                                </button>
+                              ))}
+                            </div>
+                          </details>
+                        )}
                         <button type="button" className="review-done-button" onClick={() => markReviewed(reflection.id)}>
                           I reviewed this <span aria-hidden="true">→</span>
                         </button>
