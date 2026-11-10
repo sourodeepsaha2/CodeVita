@@ -268,7 +268,8 @@
   gap: 10px;
 }
 
-.review-favorite-status {
+.review-favorite-status,
+.review-snooze-status {
   margin: -8px 0 14px;
   color: var(--cv-accent-text);
   font-size: 0.76rem;
@@ -556,6 +557,72 @@
 .review-done-button:hover {
   border-color: var(--cv-accent);
   background: rgba(109, 145, 245, 0.1);
+}
+
+.review-snooze {
+  position: relative;
+}
+
+.review-snooze summary {
+  padding: 7px 10px;
+  border: 1px solid var(--cv-border);
+  border-radius: 8px;
+  color: var(--cv-text-2);
+  background: var(--cv-surface-alpha);
+  font-size: 0.74rem;
+  cursor: pointer;
+  list-style: none;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.review-snooze summary::-webkit-details-marker {
+  display: none;
+}
+
+.review-snooze summary::after {
+  content: "⌄";
+  margin-left: 7px;
+  color: var(--cv-text-muted);
+}
+
+.review-snooze[open] summary,
+.review-snooze summary:hover {
+  border-color: var(--cv-accent);
+  color: var(--cv-accent-text);
+  background: var(--cv-surface-2);
+}
+
+.review-snooze-menu {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 8px);
+  z-index: 5;
+  display: grid;
+  min-width: 132px;
+  gap: 3px;
+  padding: 5px;
+  border: 1px solid var(--cv-border);
+  border-radius: 10px;
+  background: var(--cv-surface);
+  box-shadow: var(--cv-glow-sm);
+}
+
+.review-snooze-menu button {
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 6px;
+  color: var(--cv-text-2);
+  background: transparent;
+  font: inherit;
+  font-size: 0.75rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.review-snooze-menu button:hover,
+.review-snooze-menu button:focus-visible {
+  color: var(--cv-accent-text);
+  background: var(--cv-surface-2);
 }
 
 .review-interval-hint {
