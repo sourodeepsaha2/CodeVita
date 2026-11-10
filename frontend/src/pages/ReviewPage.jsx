@@ -12,6 +12,7 @@ export default function ReviewPage() {
   const [editingId, setEditingId] = useState(null);
   const [backupMessage, setBackupMessage] = useState("");
   const [favoriteMessage, setFavoriteMessage] = useState("");
+  const [reviewMessage, setReviewMessage] = useState("");
   const backupInputRef = useRef(null);
 
   useEffect(() => {
@@ -45,15 +46,19 @@ export default function ReviewPage() {
   };
 
   const snoozeReview = (id, days) => {
-    const next = loadReflections().map((reflection) =>
-      reflection.id === id ? snoozeReflectionReview(reflection, days) : reflection
-    );
+    const current = loadReflections();
+    const reflection = current.find((entry) => entry.id === id);
+    if (!reflection) return;
+    const updated = snoozeReflectionReview(reflection, days);
+    const next = current.map((entry) => entry.id === id ? updated : entry);
     if (!saveReflections(next)) {
       setStorageError(true);
+      setReviewMessage("Your browser couldn’t save this snooze. Check available storage and try again.");
       return;
     }
     setStorageError(false);
     setReflections(next);
+    setReviewMessage(`${reflection.problem} snoozed until ${formatReviewDate(updated.nextReviewAt)}.`);
   };
 
   const removeReflection = (id) => {
@@ -210,6 +215,7 @@ export default function ReviewPage() {
           </div>
         </div>
         {favoriteMessage && <p className="review-favorite-status" role="status">{favoriteMessage}</p>}
+        {reviewMessage && <p className="review-snooze-status" role="status">{reviewMessage}</p>}
         {reflections.length === 0 ? (
           <div className="review-empty glass-card">
             <span aria-hidden="true">📓</span>
