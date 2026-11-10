@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
-import { createReflection, loadReflections, saveReflections, scheduleReflectionReview, getReviewIntervalDays, createReflectionBackup, parseReflectionBackup, updateReflection, setReflectionFavorite } from "../lib/reflectionJournal";
+import { createReflection, loadReflections, saveReflections, scheduleReflectionReview, getReviewIntervalDays, createReflectionBackup, parseReflectionBackup, updateReflection, setReflectionFavorite, snoozeReflectionReview } from "../lib/reflectionJournal";
 import "./ReviewPage.css";
 
 export default function ReviewPage() {
@@ -35,6 +35,18 @@ export default function ReviewPage() {
   const markReviewed = (id) => {
     const next = loadReflections().map((reflection) =>
       reflection.id === id ? scheduleReflectionReview(reflection, reflection.confidence) : reflection
+    );
+    if (!saveReflections(next)) {
+      setStorageError(true);
+      return;
+    }
+    setStorageError(false);
+    setReflections(next);
+  };
+
+  const snoozeReview = (id, days) => {
+    const next = loadReflections().map((reflection) =>
+      reflection.id === id ? snoozeReflectionReview(reflection, days) : reflection
     );
     if (!saveReflections(next)) {
       setStorageError(true);
