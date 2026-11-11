@@ -1,5 +1,11 @@
 const axios = require('axios');
 
+const getRapidApiKey = () => {
+	const apiKey = process.env.RAPIDAPI_KEY;
+	if (!apiKey) throw new Error('RAPIDAPI_KEY environment variable is required');
+	return apiKey;
+};
+
 
 const getlanguageById = (lang)=>{
 
@@ -21,8 +27,8 @@ const options = {
     base64_encoded: 'false'
   },
   headers: {
-    'x-rapidapi-key': '96e7da6d50mshc96203a678fb557p19c090jsn5e1cc3ef8f0c',
-    'x-rapidapi-host': 'judge0-ce.p.rapidapi.com',
+    'x-rapidapi-key': getRapidApiKey(),
+    'x-rapidapi-host': process.env.RAPIDAPI_HOST || 'judge0-ce.p.rapidapi.com',
     'Content-Type': 'application/json'
   },
   data: {
@@ -58,8 +64,8 @@ const submitToken = async(resultToken)=>{
     base64_encoded: 'false'
   },
   headers: {
-    'x-rapidapi-key': '96e7da6d50mshc96203a678fb557p19c090jsn5e1cc3ef8f0c',
-    'x-rapidapi-host': 'judge0-ce.p.rapidapi.com',
+    'x-rapidapi-key': getRapidApiKey(),
+    'x-rapidapi-host': process.env.RAPIDAPI_HOST || 'judge0-ce.p.rapidapi.com',
     'Content-Type': 'application/json'
   },
   data: {
