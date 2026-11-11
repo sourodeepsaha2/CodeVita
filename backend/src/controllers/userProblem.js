@@ -1,6 +1,7 @@
 const {getLanguageById,submitBatch,submitToken} = require("../utils/ProblemUtility");
 const Problem = require("../models/problem");
 const User = require("../models/user");
+const Submission = require("../models/submission");
 
 const createProblem = async (req,res)=>{
     const {title,description,difficulty,tags,visibleTestCases,hiddenTestCases,startCode,referenceSolution,problemCreator} = req.body;
@@ -187,8 +188,8 @@ const submittedProblem = async(req,res)=>{
 
         const ans = await Submission.find({userId,problemId});
 
-        if(ans.length==0)
-            res.status(200).send("No Submission is present");
+        if(ans.length === 0)
+            return res.status(200).json([]);
 
         res.status(200).send(ans);
     }
@@ -197,4 +198,4 @@ const submittedProblem = async(req,res)=>{
     }
 }
 
-module.exports = {createProblem,updateProblem,deleteProblem,getProblembyId,getAllProblem};
+module.exports = {createProblem,updateProblem,deleteProblem,getProblembyId,getAllProblem,solvedAllProblembyUser,submittedProblem};
