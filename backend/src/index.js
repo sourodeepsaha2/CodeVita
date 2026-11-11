@@ -27,20 +27,25 @@ app.use('/user',authRouter);
 app.use('/problem',problemRouter);
 app.use('/submission',submitRouter);
 
-const InitializeConnection = async ()=>{
+const startServer = async () => {
+    const port = Number(process.env.PORT) || 3000;
 
-    try{
-        await Promise.all([main(),redisClient.connect()]);
-        console.log("DB Connected");
+    try {
+        if (!process.env.DB_CONNECT_STRING) throw new Error('DB_CONNECT_STRING is required');
+        if (!process.env.JWT_KEY) throw new Error('JWT_KEY is required');
 
-        app.listen(process.env.PORT, ()=>{
-         console.log("Server listening at port number: " + process.env.PORT);
-        })
+        await main();
+        await redisClient.connect();
+        app.listen(port, '0.0.0.0', () => {
+            console.log(`Code Vita API listening on port ${port}`);
+        });
+    } catch (error) {
+        console.error('Code Vita API failed to start:', error.message);
+        if (redisClient.isOpen) redisClient.destroy();
+        await mongoose.disconnect().catch(() => {});
+        process.exitCode = 1;
     }
-    catch(err){
-        console.log("Error: "+err);
-    }
+};
 
-}
-InitializeConnection();
+startServer();
 
