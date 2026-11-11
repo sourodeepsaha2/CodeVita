@@ -1,4 +1,4 @@
-const Problem = require("../models/problemModel");
+const Problem = require("../models/problem");
 const Submission = require("../models/submission");
 const {getLanguageById,submitBatch} = require("../utils/ProblemUtility");
 
@@ -24,7 +24,7 @@ const submitCode = async(req,res)=>{
             problemId,
             code,
             language,
-            status = 'pending',
+            status: 'pending',
             testCasesTotal: problem.hiddenTestCases.length
         })
 

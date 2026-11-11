@@ -1,44 +1,28 @@
 const jwt = require("jsonwebtoken");
-const redisClient = require('redis');
+const redisClient = require('../config/redis');
+const User = require('../models/user');
 
-const adminMiddleware = async (req,res)=>{
+const adminMiddleware = async (req, res, next) => {
+    try {
+        const token = req.cookies?.token;
+        if (!token) return res.status(401).json({ error: 'Authentication required' });
 
-    try{
-
-        const {token}=req.cookies;
-        if(!token)
-            throw new Error("Token is not present");
-
-        const payload = jwt.verify(token,process.env.JWT_KEY);
-
-        const {_id} = payload;
-
-        if(!_id){
-            throw new Error("Invalid token");
+        const payload = jwt.verify(token, process.env.JWT_KEY);
+        if (!payload._id || payload.role !== 'admin') {
+            return res.status(403).json({ error: 'Administrator access required' });
         }
 
-        const result = await User.findById(_id);
+        const user = await User.findById(payload._id).select('-password');
+        if (!user) return res.status(401).json({ error: 'User no longer exists' });
 
-        if(payload.role!=admin)
-            throw new Error("Invalid Token");
+        const isBlocked = await redisClient.exists(`token:${token}`);
+        if (isBlocked) return res.status(401).json({ error: 'Session has expired' });
 
-        if(!result){
-            throw new Error("User Doesn't Exist");
-        }
-
-        // To check if it is present in redis Blocklist
-
-        const IsBlocked = await redisClient.exists(`token:${token}`);
-
-        if(IsBlocked)
-            throw new Error("Invalid Token");
-
-        req.result = result;
-
-        next();
+        req.result = user;
+        return next();
+    } catch (error) {
+        return res.status(401).json({ error: 'Invalid session' });
     }
-    catch(err){
-        res.status(401).send("Error: "+ err.message);
-    }
-}
-module.exports=adminMiddleware;
+};
+
+module.exports = adminMiddleware;
