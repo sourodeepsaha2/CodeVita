@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { createReflection, loadReflections, saveReflections, scheduleReflectionReview, getReviewIntervalDays, createReflectionBackup, parseReflectionBackup, updateReflection, setReflectionFavorite, snoozeReflectionReview, SNOOZE_OPTIONS } from "../lib/reflectionJournal";
 import "./ReviewPage.css";
@@ -13,6 +14,7 @@ export default function ReviewPage() {
   const [backupMessage, setBackupMessage] = useState("");
   const [favoriteMessage, setFavoriteMessage] = useState("");
   const [reviewMessage, setReviewMessage] = useState("");
+  const [now, setNow] = useState(() => new Date());
   const backupInputRef = useRef(null);
 
   useEffect(() => {
@@ -20,6 +22,11 @@ export default function ReviewPage() {
     refresh();
     window.addEventListener("storage", refresh);
     return () => window.removeEventListener("storage", refresh);
+  }, []);
+
+  useEffect(() => {
+    const interval = window.setInterval(() => setNow(new Date()), 60_000);
+    return () => window.clearInterval(interval);
   }, []);
 
   const addReflection = (reflection) => {
@@ -152,11 +159,11 @@ export default function ReviewPage() {
     .filter((reflection) => {
       if (queueFilter === "all") return true;
       if (queueFilter === "saved") return Boolean(reflection.isFavorite);
-      const due = new Date(reflection.nextReviewAt) <= new Date();
+      const due = new Date(reflection.nextReviewAt) <= now;
       return queueFilter === "due" ? due : !due;
     })
     .sort((a, b) => new Date(a.nextReviewAt) - new Date(b.nextReviewAt));
-  const dueCount = reflections.filter((reflection) => new Date(reflection.nextReviewAt) <= new Date()).length;
+  const dueCount = reflections.filter((reflection) => new Date(reflection.nextReviewAt) <= now).length;
   const completedReviews = reflections.reduce((total, reflection) => total + (Number(reflection.reviewCount) || 0), 0);
 
   return (
@@ -220,12 +227,12 @@ export default function ReviewPage() {
           <div className="review-empty glass-card">
             <span aria-hidden="true">📓</span>
             <h3>Your journal is ready</h3>
-            <p>Add a reflection after solving a problem. We’ll remind you when it’s time to revisit it.</p>
+            <p>Save a reflection from a problem attempt. Your review queue will bring it back when it’s due.</p>
           </div>
         ) : visibleReflections.length ? (
           <div className="reflection-list">
             {visibleReflections.map((reflection) => {
-              const due = new Date(reflection.nextReviewAt) <= new Date();
+              const due = new Date(reflection.nextReviewAt) <= now;
               return (
                 <article className={`reflection-entry glass-card${due ? " is-due" : ""}`} key={reflection.id}>
                   {editingId === reflection.id ? (
@@ -261,6 +268,7 @@ export default function ReviewPage() {
                       <div className="reflection-entry-meta">
                         <span>Confidence <strong>{reflection.confidence}/5</strong></span>
                         <span>{reflection.reviewCount ? `Reviewed ${reflection.reviewCount} ${reflection.reviewCount === 1 ? "time" : "times"}` : "First review"}</span>
+                        {reflection.problemId && <Link className="review-retry-button" to={`/problems/${reflection.problemId}`}>Retry problem <span aria-hidden="true">→</span></Link>}
                         {due && (
                           <details className="review-snooze">
                             <summary>Snooze</summary>

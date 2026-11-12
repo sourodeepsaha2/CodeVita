@@ -82,6 +82,7 @@ export function parseReflectionBackup(contents) {
       validDate(item.createdAt) && validDate(item.nextReviewAt) &&
       Number.isInteger(item.reviewCount) && item.reviewCount >= 0 &&
       (item.isFavorite === undefined || typeof item.isFavorite === "boolean") &&
+      (item.problemId === undefined || typeof item.problemId === "string") &&
       (item.lastReviewedAt === undefined || validDate(item.lastReviewedAt));
   });
 
@@ -92,10 +93,11 @@ export function parseReflectionBackup(contents) {
   return backup.reflections;
 }
 
-export function createReflection({ problem, approach, blocker, confidence }) {
+export function createReflection({ problem, problemId, approach, blocker, confidence }) {
   return {
     id: globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`,
     problem: problem.trim(),
+    ...(typeof problemId === "string" && problemId ? { problemId } : {}),
     approach: approach.trim(),
     blocker: blocker.trim(),
     confidence: Number(confidence),
