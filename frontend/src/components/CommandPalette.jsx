@@ -4,7 +4,7 @@ import "./CommandPalette.css";
 
 const COMMANDS = [
   { label: "Go to home", detail: "Open the Code Vita homepage", href: "/", keywords: "home start" },
-  { label: "Browse FAQs", detail: "Jump to frequently asked questions", href: "/#faq", keywords: "help questions faq" },
+  { label: "Browse practice problems", detail: "Filter the Code Vita problem set", href: "/problems", keywords: "practice problems dsa coding" },
   { label: "Create an account", detail: "Sign up for Code Vita", href: "/signup", keywords: "register signup join" },
   { label: "Log in", detail: "Continue to your account", href: "/login", keywords: "signin sign in" },
   { label: "Open reflection journal", detail: "Review your problem solving notes", href: "/review", keywords: "practice journal review spaced repetition" },
@@ -26,13 +26,19 @@ export default function CommandPalette() {
     const onKeyDown = (event) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
-        if (!open) previousFocusRef.current = document.activeElement;
+        if (!open) {
+          previousFocusRef.current = document.activeElement;
+          setQuery("");
+          setActiveIndex(0);
+        }
         setOpen((current) => !current);
       }
       if (event.key === "Escape") setOpen(false);
     };
     const onOpen = () => {
       previousFocusRef.current = document.activeElement;
+      setQuery("");
+      setActiveIndex(0);
       setOpen(true);
     };
     window.addEventListener("keydown", onKeyDown);
@@ -45,8 +51,6 @@ export default function CommandPalette() {
 
   useEffect(() => {
     if (open) {
-      setQuery("");
-      setActiveIndex(0);
       requestAnimationFrame(() => inputRef.current?.focus());
     } else {
       previousFocusRef.current?.focus?.();
