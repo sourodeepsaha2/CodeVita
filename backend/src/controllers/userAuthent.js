@@ -1,114 +1,139 @@
 const redisClient = require("../config/redis");
-const User = require("../models/user")
+const User = require("../models/user");
 const validate = require('../utils/validator');
 const bcrypt = require("bcrypt");
-const jwt = require('jsonwebtoken')
-const Submission = require('../models/submission')
+const jwt = require('jsonwebtoken');
+const Submission = require('../models/submission');
 
-const register = async(req,res)=>{
-    try{
-        //validate the data
+const COOKIE_OPTIONS = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+};
+
+const publicUser = (user) => ({
+    id: user._id,
+    username: user.username,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    emailId: user.emailId,
+    role: user.role,
+    problemSolved: user.problemSolved,
+});
+
+const issueSession = (user, res, remember = false) => {
+    const expiresIn = remember ? '30d' : '1d';
+    const token = jwt.sign(
+        { _id: user._id, emailId: user.emailId, role: user.role },
+        process.env.JWT_KEY,
+        { expiresIn }
+    );
+    const options = remember
+        ? { ...COOKIE_OPTIONS, maxAge: 30 * 24 * 60 * 60 * 1000 }
+        : COOKIE_OPTIONS;
+    res.cookie('token', token, options);
+};
+
+const register = async (req, res) => {
+    try {
         validate(req.body);
-        const {firstName, emailId, password}=req.body;
-        req.body.password = await bcrypt.hash(password, 10);
-        req.body.role = 'user';
+        const username = req.body.username.trim().toLowerCase();
+        const emailId = req.body.emailId.trim().toLowerCase();
+        const existing = await User.findOne({ $or: [{ username }, { emailId }] });
+        if (existing) return res.status(409).json({ error: 'That username or email is already registered.' });
 
-        const user = await User.create(req.body);
-        const token = jwt.sign({_id:user._id, emailId:emailId, role:'user'},process.env.JWT_KEY,{expiresIn: 60*60})
-        res.cookie('token',token,{maxAge:60*60*1000});
-        res.status(201).send("User Registered Sucessfully");
+        const user = await User.create({
+            username,
+            emailId,
+            password: await bcrypt.hash(req.body.password, 10),
+            role: 'user',
+        });
+        issueSession(user, res);
+        return res.status(201).json({ user: publicUser(user) });
+    } catch (error) {
+        if (error.code === 11000) return res.status(409).json({ error: 'That username or email is already registered.' });
+        return res.status(400).json({ error: error.message || 'Could not create account.' });
     }
-    catch(err){
-        res.status(401).send("Error: "+err);
+};
+
+const login = async (req, res) => {
+    try {
+        const emailId = req.body?.emailId?.trim().toLowerCase();
+        const password = req.body?.password;
+        if (!emailId || typeof password !== 'string') {
+            return res.status(400).json({ error: 'Email and password are required.' });
+        }
+
+        const user = await User.findOne({ emailId });
+        const passwordMatches = user && await bcrypt.compare(password, user.password);
+        if (!passwordMatches) return res.status(401).json({ error: 'Invalid email or password.' });
+
+        issueSession(user, res, req.body.remember === true);
+        return res.status(200).json({ user: publicUser(user) });
+    } catch (error) {
+        return res.status(500).json({ error: 'Could not sign in. Please try again.' });
     }
-} 
+};
 
-const login = async(req,res)=>{
-    try{
-        const {emailId, password} = req.body;
-
-        if(!emailid)
-            throw new Error("Invalid Credentials");
-
-        if(!paasword)
-            throw new Error("Invalid Credetials");
-
-        const user = User.findOne({emailId});
-
-        const match = bcrypt.compare(password,user.paasword);
-
-        if(!match)
-            throw new Error("Invalid Credentials");
-
-        const token = jwt.sign({_id:user._id, emailId:emailId, role:'user'},process.env.JWT_KEY,{expiresIn: 60*60})
-        res.cookie('token',token,{maxAge:60*60*1000});
-        res.status(200).send("Logged in Sucessfully");
+const logout = async (req, res) => {
+    try {
+        const token = req.cookies?.token;
+        if (token) {
+            const payload = jwt.verify(token, process.env.JWT_KEY);
+            const remainingSeconds = Math.max(1, payload.exp - Math.floor(Date.now() / 1000));
+            await redisClient.set(`token:${token}`, 'Blocked', { EX: remainingSeconds });
+        }
+        res.clearCookie('token', COOKIE_OPTIONS);
+        return res.status(200).json({ message: 'Signed out successfully.' });
+    } catch (error) {
+        res.clearCookie('token', COOKIE_OPTIONS);
+        return res.status(200).json({ message: 'Signed out successfully.' });
     }
-    catch(err){
-        res.status(401).send("Error: "+err);
+};
+
+const adminRegister = async (req, res) => {
+    try {
+        validate(req.body, { requireUsername: false });
+        const emailId = req.body.emailId.trim().toLowerCase();
+        const existing = await User.findOne({ emailId });
+        if (existing) return res.status(409).json({ error: 'That email is already registered.' });
+
+        const user = await User.create({
+            firstName: req.body.firstName.trim(),
+            lastName: req.body.lastName.trim(),
+            emailId,
+            password: await bcrypt.hash(req.body.password, 10),
+            role: 'admin',
+        });
+        issueSession(user, res);
+        return res.status(201).json({ user: publicUser(user) });
+    } catch (error) {
+        if (error.code === 11000) return res.status(409).json({ error: 'That email is already registered.' });
+        return res.status(400).json({ error: error.message || 'Could not create administrator.' });
     }
-}
+};
 
-const logout = async(req,res)=>{
-    try{
-        const {token} = req.cookies;
-
-        const payload = jwt.decode(token);
-
-        await redisClient.set(`token:${token}`,'Blocked');
-        await redisClient.expireAt(`token:${token}`,payload.exp);
-
-        res.cookie("token",null,{expires: new Date(Date.now())});
-        res.send("Logged Out Successfully");
-    }
-    catch(err){
-        res.status(401).send("Error: "+err);
-    }
-}
-
-const adminRegister = async(req,res)=>{
-   try{
-        //validate the data
-        
-        validate(req.body);
-        const {firstName, emailId, password}=req.body;
-        req.body.password = await bcrypt.hash(password, 10);
-        req.body.role = 'admin';
-
-        const user = await User.create(req.body);
-        const token = jwt.sign({_id:user._id, emailId:emailId, role:'admin'},process.env.JWT_KEY,{expiresIn: 60*60})
-        res.cookie('token',token,{maxAge:60*60*1000});
-        res.status(201).send("User Registered Sucessfully");
-    }
-    catch(err){
-        res.status(400).send("Error: "+err);
-    }
-}
-
-const deleteProfile = async(req,res)=>{
-    try{
+const deleteProfile = async (req, res) => {
+    try {
         const userId = req.result._id;
-
         await User.findByIdAndDelete(userId);
-
-        await Submission.deleteMany({userId});
-
-        res.status(200).send("Deleted Successfully");
-
+        await Submission.deleteMany({ userId });
+        res.clearCookie('token', COOKIE_OPTIONS);
+        return res.status(200).json({ message: 'Account deleted.' });
+    } catch (error) {
+        return res.status(500).json({ error: 'Could not delete account.' });
     }
-    catch(err){
-        res.status(500).send("Internal Server Error");
-    }
-}
+};
 
 const getProfile = async (req, res) => {
     try {
         const user = await User.findById(req.result._id).select('-password');
-        if (!user) return res.status(404).json({ error: 'User not found' });
-        return res.status(200).json(user);
-    } catch (err) {
-        return res.status(500).json({ error: 'Could not load profile' });
+        if (!user) return res.status(404).json({ error: 'User not found.' });
+        return res.status(200).json({ user: publicUser(user) });
+    } catch (error) {
+        return res.status(500).json({ error: 'Could not load profile.' });
     }
 };
 
-module.exports = {register, login, logout, adminRegister, getProfile, deleteProfile};
+module.exports = { register, login, logout, adminRegister, getProfile, deleteProfile };
