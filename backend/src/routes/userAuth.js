@@ -8,7 +8,7 @@ const adminMiddleware = require('../middleware/adminMiddleware');
 
 authRouter.post('/register', register); //Register
 authRouter.post('/login', login); //login
-authRouter.post('/logout', userMiddleware, logout); //logout
+authRouter.post('/logout', logout); // Clear a session even after its token has expired.
 authRouter.post('/admin/register',adminMiddleware, adminRegister);
 authRouter.get('/getProfile', userMiddleware, getProfile); //GetProfile
 authRouter.delete('/profile',userMiddleware,deleteProfile);
