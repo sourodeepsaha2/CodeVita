@@ -2,15 +2,22 @@ const mongoose = require('mongoose');
 const {Schema} = mongoose;
 
 const userSchema = new Schema({
+    username:{
+        type:String,
+        trim:true,
+        lowercase:true,
+        minLength:3,
+        maxLength:20,
+        unique:true,
+        sparse:true
+    },
     firstName:{
         type: String,
-        required: true,
         minLength: 3,
         maxLength: 20
     },
     lastName:{
         type:String,
-        required: true,
         minLength: 3,
         maxLength: 20
     },
@@ -35,9 +42,8 @@ const userSchema = new Schema({
     problemSolved:{
         type:[{
             type:Schema.Types.ObjectId,
-            ref:'Problem'
-        }],
-        unique:true
+            ref:'problem'
+        }]
     },
     password:{
         type:String,
