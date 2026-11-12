@@ -8,6 +8,9 @@ import SignupPage from "./pages/SignupPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import CommandPalette from "./components/CommandPalette";
 import ReviewPage from "./pages/ReviewPage";
+import ProblemsPage from "./pages/ProblemsPage";
+import ProblemPage from "./pages/ProblemPage";
+import "./App.css";
 
 function App() {
   return (
@@ -20,6 +23,8 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/review" element={<ReviewPage />} />
+        <Route path="/problems" element={<ProblemsPage />} />
+        <Route path="/problems/:id" element={<ProblemPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <BackToTop />
