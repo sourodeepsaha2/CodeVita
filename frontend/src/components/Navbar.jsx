@@ -2,18 +2,17 @@ import { Link, NavLink, useLocation } from "react-router";
 import { useState, useEffect } from "react";
 import Logo from "./Logo";
 import ThemeToggle from "./ThemeToggle";
+import { apiRequest } from "../lib/api";
 
 const NAV_LINKS = [
   { label: "Problems", href: "/problems" },
-  { label: "Contest", href: "/contest" },
-  { label: "Leaderboard", href: "/leaderboard" },
-  { label: "Discuss", href: "/discuss" },
   { label: "Review journal", href: "/review" },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [user, setUser] = useState(null);
   const { pathname } = useLocation();
 
   // Close the mobile menu on route change.
@@ -29,6 +28,25 @@ export default function Navbar() {
     window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
   }, []);
+
+  useEffect(() => {
+    let active = true;
+    apiRequest("/user/getProfile").then(({ user: profile }) => {
+      if (active) setUser(profile);
+    }).catch(() => {
+      if (active) setUser(null);
+    });
+    return () => { active = false; };
+  }, [pathname]);
+
+  const signOut = async () => {
+    try {
+      await apiRequest("/user/logout", { method: "POST" });
+      setUser(null);
+    } catch {
+      // Keep the signed-in state if the server could not clear the session.
+    }
+  };
 
   // Close the mobile menu with Escape.
   useEffect(() => {
@@ -66,12 +84,10 @@ export default function Navbar() {
               <span>Search</span><kbd>⌘ K</kbd>
             </button>
             <ThemeToggle />
-            <Link to="/login" id="nav-login" className="btn-outline-cv btn-sm">
-              Log In
-            </Link>
-            <Link to="/signup" id="nav-signup" className="btn-primary-cv btn-sm">
-              Sign Up Free
-            </Link>
+            {user ? <><span className="nav-user-name">@{user.username || user.firstName}</span><button type="button" className="btn-outline-cv btn-sm" onClick={signOut}>Log Out</button></> : <>
+              <Link to="/login" id="nav-login" className="btn-outline-cv btn-sm">Log In</Link>
+              <Link to="/signup" id="nav-signup" className="btn-primary-cv btn-sm">Sign Up Free</Link>
+            </>}
           </div>
 
           {/* Mobile controls */}
@@ -112,12 +128,10 @@ export default function Navbar() {
             </NavLink>
           ))}
           <hr className="mobile-menu-divider" />
-          <Link to="/login" id="nav-login-mobile" className="btn-outline-cv btn-block">
-            Log In
-          </Link>
-          <Link to="/signup" id="nav-signup-mobile" className="btn-primary-cv btn-block">
-            Sign Up Free
-          </Link>
+          {user ? <button type="button" className="btn-outline-cv btn-block" onClick={signOut}>Log Out</button> : <>
+            <Link to="/login" id="nav-login-mobile" className="btn-outline-cv btn-block">Log In</Link>
+            <Link to="/signup" id="nav-signup-mobile" className="btn-primary-cv btn-block">Sign Up Free</Link>
+          </>}
         </div>
       )}
     </>
