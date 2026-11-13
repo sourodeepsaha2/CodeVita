@@ -7,11 +7,13 @@ const cookieParser = require('cookie-parser');
 const authRouter = require("./routes/userAuth");
 const redisClient = require('./config/redis');
 const User = require('./models/user');
+const Reflection = require('./models/reflection');
 const problemRouter = require("./routes/problemCreator")
 const submitRouter = require('./routes/submit');
+const reflectionRouter = require('./routes/reflection');
 
 
-app.use(express.json());
+app.use(express.json({ limit: '2mb' }));
 app.use(cookieParser());
 
 const frontendOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
@@ -44,6 +46,7 @@ app.get('/health', (_req, res) => {
 app.use('/user',authRouter);
 app.use('/problem',problemRouter);
 app.use('/submission',submitRouter);
+app.use('/journal',reflectionRouter);
 
 const startServer = async () => {
     const port = Number(process.env.PORT) || 3000;
@@ -53,7 +56,7 @@ const startServer = async () => {
         if (!process.env.JWT_KEY) throw new Error('JWT_KEY is required');
 
         await main();
-        await User.init();
+        await Promise.all([User.init(), Reflection.init()]);
         const indexes = await User.collection.indexes();
         const legacySolvedIndex = indexes.find((index) => index.unique && index.key?.problemSolved);
         if (legacySolvedIndex) {
