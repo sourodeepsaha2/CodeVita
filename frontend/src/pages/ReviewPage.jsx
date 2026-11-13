@@ -58,89 +58,81 @@ export default function ReviewPage() {
     return () => window.clearInterval(interval);
   }, []);
 
-  const addReflection = (reflection) => {
-    const next = [reflection, ...loadReflections()];
-    if (!saveReflections(next)) {
-      setStorageError(true);
+  const addReflection = async (reflection) => {
+    try {
+      const saved = await createRemoteReflection(reflection);
+      setReflections((current) => [saved, ...current.filter((entry) => entry.id !== saved.id)]);
+      setMutationError("");
+      return true;
+    } catch (error) {
+      setMutationError(error.message || "Could not save this reflection.");
       return false;
     }
-    setStorageError(false);
-    setReflections(next);
-    return true;
   };
 
-  const markReviewed = (id) => {
-    const next = loadReflections().map((reflection) =>
-      reflection.id === id ? scheduleReflectionReview(reflection, reflection.confidence) : reflection
-    );
-    if (!saveReflections(next)) {
-      setStorageError(true);
-      return;
+  const replaceReflection = (updated) => {
+    setReflections((current) => current.map((entry) => entry.id === updated.id ? updated : entry));
+  };
+
+  const markReviewed = async (id) => {
+    try {
+      replaceReflection(await reviewRemoteReflection(id));
+      setReviewMessage("Review saved. Your next revisit is scheduled.");
+      setMutationError("");
+    } catch (error) {
+      setMutationError(error.message || "Could not save this review.");
     }
-    setStorageError(false);
-    setReflections(next);
   };
 
-  const snoozeReview = (id, days) => {
-    const current = loadReflections();
-    const reflection = current.find((entry) => entry.id === id);
+  const snoozeReview = async (id, days) => {
+    const reflection = reflections.find((entry) => entry.id === id);
     if (!reflection) return;
-    const updated = snoozeReflectionReview(reflection, days);
-    const next = current.map((entry) => entry.id === id ? updated : entry);
-    if (!saveReflections(next)) {
-      setStorageError(true);
-      setReviewMessage("Your browser couldn’t save this snooze. Check available storage and try again.");
-      return;
+    try {
+      const updated = await snoozeRemoteReflection(id, days);
+      replaceReflection(updated);
+      setMutationError("");
+      setReviewMessage(`${reflection.problem} snoozed until ${formatReviewDate(updated.nextReviewAt)}.`);
+    } catch (error) {
+      setMutationError(error.message || "Could not snooze this review.");
     }
-    setStorageError(false);
-    setReflections(next);
-    setReviewMessage(`${reflection.problem} snoozed until ${formatReviewDate(updated.nextReviewAt)}.`);
   };
 
-  const removeReflection = (id) => {
-    const next = loadReflections().filter((reflection) => reflection.id !== id);
-    if (!saveReflections(next)) {
-      setStorageError(true);
-      return;
+  const removeReflection = async (id) => {
+    try {
+      await deleteRemoteReflection(id);
+      setReflections((current) => current.filter((entry) => entry.id !== id));
+      setMutationError("");
+    } catch (error) {
+      setMutationError(error.message || "Could not delete this reflection.");
     }
-    setStorageError(false);
-    setReflections(next);
   };
 
-  const toggleFavorite = (id) => {
-    const current = loadReflections();
-    const reflection = current.find((entry) => entry.id === id);
+  const toggleFavorite = async (id) => {
+    const reflection = reflections.find((entry) => entry.id === id);
     if (!reflection) return;
-    const next = current.map((entry) => entry.id === id
-      ? setReflectionFavorite(entry, !entry.isFavorite)
-      : entry
-    );
-    if (!saveReflections(next)) {
-      setStorageError(true);
-      setFavoriteMessage("Your browser couldn’t save this favorite. Check available storage and try again.");
-      return;
+    try {
+      replaceReflection(await updateRemoteReflection(id, { isFavorite: !reflection.isFavorite }));
+      setMutationError("");
+      setFavoriteMessage(`${reflection.problem} ${reflection.isFavorite ? "removed from" : "added to"} saved reflections.`);
+    } catch (error) {
+      setMutationError(error.message || "Could not update this saved reflection.");
     }
-    setStorageError(false);
-    setReflections(next);
-    setFavoriteMessage(`${reflection.problem} ${reflection.isFavorite ? "removed from" : "added to"} saved reflections.`);
   };
 
-  const saveEditedReflection = (id, values) => {
-    const next = loadReflections().map((reflection) =>
-      reflection.id === id ? updateReflection(reflection, values) : reflection
-    );
-    if (!saveReflections(next)) {
-      setStorageError(true);
+  const saveEditedReflection = async (id, values) => {
+    try {
+      replaceReflection(await updateRemoteReflection(id, values));
+      setMutationError("");
+      setEditingId(null);
+      return true;
+    } catch (error) {
+      setMutationError(error.message || "Could not update this reflection.");
       return false;
     }
-    setStorageError(false);
-    setReflections(next);
-    setEditingId(null);
-    return true;
   };
 
   const exportBackup = () => {
-    const blob = new Blob([createReflectionBackup(loadReflections())], { type: "application/json" });
+    const blob = new Blob([createReflectionBackup(reflections)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
