@@ -12,4 +12,4 @@ The frontend expects the API at `http://localhost:3000` unless `VITE_API_BASE_UR
 
 Set `ADMIN_EMAIL`, `ADMIN_PASSWORD` (at least 12 characters), and optionally `ADMIN_NAME` in the backend environment, then run `npm run seed` from this directory. The script creates that admin account if needed and installs or updates the 10 starter problems. If the email already belongs to a non-admin account, the seed command promotes it and replaces its password with `ADMIN_PASSWORD`; use an address reserved for administration.
 
-The seed script does not need Redis or Judge0 credentials. Code execution requires `RAPIDAPI_KEY` at runtime.
+The seed script does not need Redis or Judge0 credentials. Code execution requires `RAPIDAPI_KEY` at runtime. Journal entries, review dates, and snooze state are stored per account in MongoDB through the authenticated `/journal/reflections` API.
