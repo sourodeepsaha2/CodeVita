@@ -339,20 +339,23 @@ function ReflectionEditor({ reflection, onSave, onCancel }) {
     blocker: reflection.blocker,
   });
   const [errors, setErrors] = useState({});
+  const [saving, setSaving] = useState(false);
 
   const update = (field) => (event) => {
     setValues((current) => ({ ...current, [field]: event.target.value }));
     setErrors((current) => ({ ...current, [field]: "", save: "" }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const nextErrors = {};
     if (!values.problem.trim()) nextErrors.problem = "Add the problem name.";
     if (!values.approach.trim()) nextErrors.approach = "Describe the approach you tried.";
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length) return;
-    if (!onSave(values)) setErrors((current) => ({ ...current, save: "Couldn’t save changes. Check available browser storage and try again." }));
+    setSaving(true);
+    if (!await onSave(values)) setErrors((current) => ({ ...current, save: "Couldn’t save changes. Check your connection and try again." }));
+    setSaving(false);
   };
 
   return (
