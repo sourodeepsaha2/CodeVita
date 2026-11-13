@@ -376,8 +376,8 @@ function ReflectionEditor({ reflection, onSave, onCancel }) {
       </label>
       {errors.save && <p className="reflection-storage-error" role="alert">{errors.save}</p>}
       <div className="reflection-editor-actions">
-        <button type="button" className="btn-outline-cv" onClick={onCancel}>Cancel</button>
-        <button type="submit" className="btn-primary-cv">Save changes</button>
+        <button type="button" className="btn-outline-cv" onClick={onCancel} disabled={saving}>Cancel</button>
+        <button type="submit" className="btn-primary-cv" disabled={saving}>{saving ? "Saving…" : "Save changes"}</button>
       </div>
     </form>
   );
