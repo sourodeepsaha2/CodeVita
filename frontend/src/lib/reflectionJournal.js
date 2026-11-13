@@ -40,6 +40,15 @@ export function saveReflections(reflections) {
   }
 }
 
+export function clearReflections() {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function createReflectionBackup(reflections) {
   return JSON.stringify({
     format: BACKUP_FORMAT,
@@ -83,6 +92,7 @@ export function parseReflectionBackup(contents) {
       Number.isInteger(item.reviewCount) && item.reviewCount >= 0 &&
       (item.isFavorite === undefined || typeof item.isFavorite === "boolean") &&
       (item.problemId === undefined || typeof item.problemId === "string") &&
+      (item.submissionId === undefined || typeof item.submissionId === "string") &&
       (item.lastReviewedAt === undefined || validDate(item.lastReviewedAt));
   });
 
@@ -93,11 +103,12 @@ export function parseReflectionBackup(contents) {
   return backup.reflections;
 }
 
-export function createReflection({ problem, problemId, approach, blocker, confidence }) {
+export function createReflection({ id, problem, problemId, submissionId, approach, blocker, confidence }) {
   return {
-    id: globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+    id: id || globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`,
     problem: problem.trim(),
     ...(typeof problemId === "string" && problemId ? { problemId } : {}),
+    ...(typeof submissionId === "string" && submissionId ? { submissionId } : {}),
     approach: approach.trim(),
     blocker: blocker.trim(),
     confidence: Number(confidence),
