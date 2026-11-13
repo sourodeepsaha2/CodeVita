@@ -439,7 +439,7 @@ function ReflectionForm({ onAdd }) {
       </label>
       <div className="reflection-submit-row">
         <p className="reflection-save-message" role="status">{saved ? "Saved to your review queue." : ""}</p>
-        <button type="submit" className="btn-primary-cv">Save reflection <span aria-hidden="true">→</span></button>
+        <button type="submit" className="btn-primary-cv" disabled={saving}>{saving ? "Saving…" : <>Save reflection <span aria-hidden="true">→</span></>}</button>
       </div>
     </form>
   );
