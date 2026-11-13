@@ -192,12 +192,12 @@ export default function ReviewPage() {
       <header className="review-header">
         <p className="review-eyebrow">LEARN FROM EVERY ATTEMPT</p>
         <h1>Your reflection journal</h1>
-        <p>Save the thinking behind a solution and give yourself a date to revisit it.</p>
+        <p>Your reflections and review schedule stay with your account when you sign in elsewhere.</p>
       </header>
       <section className="journal-backup" aria-label="Journal backup">
         <div>
           <h2>Keep a copy of your journal</h2>
-          <p>Export your entries or restore them from a Code Vita backup.</p>
+          <p>Export your account entries or restore them from a Code Vita backup.</p>
         </div>
         <div className="journal-backup-actions">
           <button type="button" className="btn-outline-cv" onClick={exportBackup}>Download backup</button>
@@ -220,7 +220,7 @@ export default function ReviewPage() {
           </div>
         </div>
         <ReflectionForm onAdd={addReflection} />
-        {storageError && <p className="reflection-storage-error" role="alert">Your browser couldn’t save this reflection. Check available storage and try again.</p>}
+        {mutationError && <p className="reflection-storage-error" role="alert">{mutationError}</p>}
       </section>
       <section className="reflection-list-section" aria-labelledby="review-list-title">
         <div className="review-list-heading">
