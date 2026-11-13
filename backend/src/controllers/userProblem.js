@@ -1,6 +1,7 @@
 const Problem = require("../models/problem");
 const User = require("../models/user");
 const Submission = require("../models/submission");
+const Reflection = require("../models/reflection");
 
 const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
@@ -30,6 +31,7 @@ const deleteProblem = async (req, res) => {
         await Promise.all([
             Submission.deleteMany({ problemId: problem._id }),
             User.updateMany({}, { $pull: { problemSolved: problem._id } }),
+            Reflection.updateMany({ problemId: problem._id }, { $set: { problemId: null, submissionId: null } }),
         ]);
         return res.status(200).json({ message: "Problem deleted." });
     } catch (error) {
