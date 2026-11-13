@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
-import { createReflection, loadReflections, saveReflections, scheduleReflectionReview, getReviewIntervalDays, createReflectionBackup, parseReflectionBackup, updateReflection, setReflectionFavorite, snoozeReflectionReview, SNOOZE_OPTIONS } from "../lib/reflectionJournal";
+import { createReflection, loadReflections, clearReflections, getReviewIntervalDays, createReflectionBackup, parseReflectionBackup, SNOOZE_OPTIONS } from "../lib/reflectionJournal";
+import { listReflections, createRemoteReflection, importRemoteReflections, updateRemoteReflection, reviewRemoteReflection, snoozeRemoteReflection, deleteRemoteReflection } from "../lib/reflectionApi";
 import "./ReviewPage.css";
 
 export default function ReviewPage() {
   useDocumentTitle("Reflection Journal");
   const [reflections, setReflections] = useState([]);
-  const [storageError, setStorageError] = useState(false);
+  const [pageLoading, setPageLoading] = useState(true);
+  const [journalError, setJournalError] = useState("");
+  const [mutationError, setMutationError] = useState("");
   const [queueFilter, setQueueFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [editingId, setEditingId] = useState(null);
@@ -18,10 +21,36 @@ export default function ReviewPage() {
   const backupInputRef = useRef(null);
 
   useEffect(() => {
-    const refresh = () => setReflections(loadReflections());
-    refresh();
-    window.addEventListener("storage", refresh);
-    return () => window.removeEventListener("storage", refresh);
+    let active = true;
+    const load = async () => {
+      try {
+        let entries = await listReflections();
+        if (active) setReflections(entries);
+
+        const localEntries = loadReflections();
+        const knownClientIds = new Set(entries.map((entry) => entry.clientId).filter(Boolean));
+        const unclaimedEntries = localEntries.filter((entry) => !knownClientIds.has(entry.clientId || entry.id));
+        if (unclaimedEntries.length) {
+          try {
+            await importRemoteReflections(unclaimedEntries);
+          } catch (error) {
+            if (active) setBackupMessage(`Could not move your local journal into this account: ${error.message}`);
+            return;
+          }
+          setBackupMessage(clearReflections()
+            ? `Moved ${unclaimedEntries.length} local ${unclaimedEntries.length === 1 ? "reflection" : "reflections"} into your account journal.`
+            : "Copied your local journal into your account, but this browser couldn’t clear its old copy.");
+          entries = await listReflections();
+          if (active) setReflections(entries);
+        }
+      } catch (error) {
+        if (active) setJournalError(error.message || "Could not load your account journal.");
+      } finally {
+        if (active) setPageLoading(false);
+      }
+    };
+    load();
+    return () => { active = false; };
   }, []);
 
   useEffect(() => {
