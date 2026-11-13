@@ -8,6 +8,7 @@ Target launch: November 18, 2026.
 - A learner can browse and open a focused set of 10–15 curated DSA problems.
 - A learner can run examples, submit a solution to the judge, and see a saved result.
 - A learner can record why an attempt failed and revisit the problem later without hints.
+- Reflections and scheduled retries belong to the learner's account and persist across sessions.
 
 The product's learning loop is mistake memory: a failed attempt informs what the learner reviews next. The existing reflection journal is the starting point for that experience.
 
