@@ -1,7 +1,8 @@
 import { Link, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { apiRequest } from "../lib/api";
-import { createReflection, loadReflections, saveReflections } from "../lib/reflectionJournal";
+import { createReflection } from "../lib/reflectionJournal";
+import { createRemoteReflection } from "../lib/reflectionApi";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 export default function ProblemPage() {
@@ -19,6 +20,8 @@ function ProblemPractice({ id }) {
   const [result, setResult] = useState(null);
   const [submissionHistory, setSubmissionHistory] = useState([]);
   const [showReflection, setShowReflection] = useState(false);
+  const [reflectionClientId, setReflectionClientId] = useState("");
+  const [savingReflection, setSavingReflection] = useState(false);
   const [approach, setApproach] = useState("");
   const [blocker, setBlocker] = useState("");
   const [confidence, setConfidence] = useState("2");
@@ -63,7 +66,10 @@ function ProblemPractice({ id }) {
       setResult(submission);
       const history = await apiRequest(`/problem/submittedProblem/${id}`).catch(() => null);
       if (history) setSubmissionHistory(history.submissions || []);
-      if (submission.status !== "accepted") setShowReflection(true);
+      if (submission.status !== "accepted") {
+        setReflectionClientId(globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`);
+        setShowReflection(true);
+      }
     } catch (requestError) {
       setError(requestError.message);
     } finally {
@@ -71,16 +77,20 @@ function ProblemPractice({ id }) {
     }
   };
 
-  const saveAttemptReflection = (event) => {
+  const saveAttemptReflection = async (event) => {
     event.preventDefault();
     if (!approach.trim()) return;
-    const reflection = createReflection({ problem: problem.title, problemId: id, approach, blocker, confidence });
-    if (!saveReflections([reflection, ...loadReflections()])) {
-      setReflectionMessage("Couldn’t save to this browser. Check available storage and try again.");
-      return;
+    setSavingReflection(true);
+    try {
+      const reflection = createReflection({ id: reflectionClientId, problem: problem.title, problemId: id, submissionId: result?.id, approach, blocker, confidence });
+      await createRemoteReflection(reflection);
+      setShowReflection(false);
+      setReflectionMessage("Reflection saved to your account journal. It’s now in your review queue.");
+    } catch (requestError) {
+      setReflectionMessage(requestError.message || "Couldn’t save this reflection. Try again.");
+    } finally {
+      setSavingReflection(false);
     }
-    setShowReflection(false);
-    setReflectionMessage("Reflection saved. It’s now in your review queue.");
   };
 
   if (loading) return <main className="catalog-page"><p className="catalog-message">Loading problem…</p></main>;
@@ -135,7 +145,7 @@ function ProblemPractice({ id }) {
       <label htmlFor="reflection-confidence">How confident are you? (1–5)</label>
       <select id="reflection-confidence" value={confidence} onChange={(event) => setConfidence(event.target.value)}>{[1, 2, 3, 4, 5].map((score) => <option key={score}>{score}</option>)}</select>
       {reflectionMessage && <p role="alert" className="submission-error">{reflectionMessage}</p>}
-      <div className="reflection-actions"><button type="button" className="btn-outline-cv" onClick={() => setShowReflection(false)}>Skip for now</button><button className="btn-primary-cv">Save reflection</button></div>
+      <div className="reflection-actions"><button type="button" className="btn-outline-cv" onClick={() => setShowReflection(false)} disabled={savingReflection}>Skip for now</button><button className="btn-primary-cv" disabled={savingReflection || !approach.trim()}>{savingReflection ? "Saving…" : "Save reflection"}</button></div>
     </form></div>}
   </main>;
 }
