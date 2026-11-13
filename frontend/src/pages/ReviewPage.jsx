@@ -149,27 +149,27 @@ export default function ReviewPage() {
 
     try {
       const imported = parseReflectionBackup(await file.text());
-      const current = loadReflections();
-      const existingIds = new Set(current.map((reflection) => reflection.id));
+      const existingIds = new Set(reflections.map((reflection) => reflection.clientId || reflection.id));
       const additions = imported.filter((reflection) => {
-        if (existingIds.has(reflection.id)) return false;
-        existingIds.add(reflection.id);
+        const clientId = reflection.clientId || reflection.id;
+        if (existingIds.has(clientId)) return false;
+        existingIds.add(clientId);
         return true;
       });
-      const next = [...current, ...additions];
-      if (!saveReflections(next)) {
-        setBackupMessage("Your browser couldn’t save the imported journal.");
-        return;
+      if (additions.length) {
+        const result = await importRemoteReflections(additions);
+        setReflections(await listReflections());
+        setBackupMessage(`Imported ${result.imported} ${result.imported === 1 ? "entry" : "entries"}. Existing entries were kept.`);
+      } else {
+        setBackupMessage("This backup has no new entries. Your journal is unchanged.");
       }
-      setStorageError(false);
-      setReflections(next);
-      setBackupMessage(additions.length
-        ? `Imported ${additions.length} ${additions.length === 1 ? "entry" : "entries"}. Existing entries were kept.`
-        : "This backup has no new entries. Your journal is unchanged.");
     } catch (error) {
       setBackupMessage(error instanceof Error ? error.message : "Couldn’t import this journal backup.");
     }
   };
+
+  if (pageLoading) return <main className="review-page"><header className="review-header"><p className="review-eyebrow">LEARN FROM EVERY ATTEMPT</p><h1>Your reflection journal</h1><p>Loading your account journal…</p></header></main>;
+  if (journalError && reflections.length === 0) return <main className="review-page"><header className="review-header"><p className="review-eyebrow">LEARN FROM EVERY ATTEMPT</p><h1>Your reflection journal</h1></header><div className="review-filter-empty glass-card" role="alert">{journalError}{journalError.includes("Authentication") || journalError.toLowerCase().includes("session") ? <> <Link to="/login">Sign in</Link> to open your journal.</> : null}</div></main>;
 
   const normalizedQuery = searchQuery.trim().toLocaleLowerCase();
   const visibleReflections = reflections
