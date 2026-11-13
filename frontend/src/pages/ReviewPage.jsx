@@ -387,18 +387,24 @@ function ReflectionForm({ onAdd }) {
   const [values, setValues] = useState({ problem: "", approach: "", blocker: "", confidence: 3 });
   const [errors, setErrors] = useState({});
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const nextErrors = {};
     if (!values.problem.trim()) nextErrors.problem = "Add the problem name.";
     if (!values.approach.trim()) nextErrors.approach = "Describe the approach you tried.";
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length) return;
-    if (onAdd(createReflection(values))) {
-      setValues({ problem: "", approach: "", blocker: "", confidence: 3 });
-      setSaved(true);
-      window.setTimeout(() => setSaved(false), 2400);
+    setSaving(true);
+    try {
+      if (await onAdd(createReflection(values))) {
+        setValues({ problem: "", approach: "", blocker: "", confidence: 3 });
+        setSaved(true);
+        window.setTimeout(() => setSaved(false), 2400);
+      }
+    } finally {
+      setSaving(false);
     }
   };
 
