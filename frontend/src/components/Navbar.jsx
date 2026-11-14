@@ -7,6 +7,7 @@ import { apiRequest } from "../lib/api";
 const NAV_LINKS = [
   { label: "Problems", href: "/problems" },
   { label: "Review journal", href: "/review" },
+  { label: "Progress", href: "/progress" },
 ];
 
 export default function Navbar() {
