@@ -8,6 +8,7 @@ const COMMANDS = [
   { label: "Create an account", detail: "Sign up for Code Vita", href: "/signup", keywords: "register signup join" },
   { label: "Log in", detail: "Continue to your account", href: "/login", keywords: "signin sign in" },
   { label: "Open reflection journal", detail: "Review your problem solving notes", href: "/review", keywords: "practice journal review spaced repetition" },
+  { label: "View learning progress", detail: "See practice activity and topics to revisit", href: "/progress", keywords: "progress insights activity mistakes topics analytics" },
 ];
 
 export default function CommandPalette() {
