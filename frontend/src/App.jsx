@@ -10,6 +10,7 @@ import CommandPalette from "./components/CommandPalette";
 import ReviewPage from "./pages/ReviewPage";
 import ProblemsPage from "./pages/ProblemsPage";
 import ProblemPage from "./pages/ProblemPage";
+import ProgressPage from "./pages/ProgressPage";
 import "./App.css";
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/review" element={<ReviewPage />} />
+        <Route path="/progress" element={<ProgressPage />} />
         <Route path="/problems" element={<ProblemsPage />} />
         <Route path="/problems/:id" element={<ProblemPage />} />
         <Route path="*" element={<NotFoundPage />} />
