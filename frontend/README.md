@@ -8,4 +8,6 @@
 
 The frontend connects to the Express API for account sessions, problem data, submissions, and the account-backed reflection journal. Existing browser-only journal entries are imported into the first signed-in account that opens the journal. The journal can be exported or restored from its JSON backup.
 
+The Progress page turns that account's submission and reflection history into a six-week activity view, retry topic signals, due review count, and recent attempts.
+
 See [the backend setup guide](../backend/README.md) for local services and the starter problem catalog.
