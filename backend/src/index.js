@@ -11,6 +11,7 @@ const Reflection = require('./models/reflection');
 const problemRouter = require("./routes/problemCreator")
 const submitRouter = require('./routes/submit');
 const reflectionRouter = require('./routes/reflection');
+const progressRouter = require('./routes/progress');
 
 
 app.use(express.json({ limit: '2mb' }));
@@ -47,6 +48,7 @@ app.use('/user',authRouter);
 app.use('/problem',problemRouter);
 app.use('/submission',submitRouter);
 app.use('/journal',reflectionRouter);
+app.use('/progress',progressRouter);
 
 const startServer = async () => {
     const port = Number(process.env.PORT) || 3000;
