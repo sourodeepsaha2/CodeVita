@@ -117,7 +117,7 @@ function ProblemPractice({ id, search }) {
           <select id="language-select" value={language} onChange={(event) => changeLanguage(event.target.value)}>
             {(problem.startCode?.length ? problem.startCode.map((entry) => entry.language.toLowerCase()) : ["javascript", "c++", "java"]).map((item) => <option key={item} value={item}>{item === "c++" ? "C++" : item[0].toUpperCase() + item.slice(1)}</option>)}
           </select>
-          <button className="btn-primary-cv" disabled={submitting || !code.trim()}>{submitting ? "Checking…" : "Submit solution"}</button>
+          <button className="btn-primary-cv" disabled={submitting || !code.trim()}>{submitting ? "Checking…" : blindRetry ? "Submit blind retry" : "Submit solution"}</button>
         </div>
         <label className="sr-only" htmlFor="source-code">Your solution</label>
         <textarea id="source-code" className="source-editor" spellCheck="false" value={code} onChange={(event) => setCode(event.target.value)} placeholder="Write your solution here…" />
