@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { createReflection, loadReflections, clearReflections, getReviewIntervalDays, createReflectionBackup, parseReflectionBackup, SNOOZE_OPTIONS } from "../lib/reflectionJournal";
 import { listReflections, createRemoteReflection, importRemoteReflections, updateRemoteReflection, reviewRemoteReflection, snoozeRemoteReflection, deleteRemoteReflection } from "../lib/reflectionApi";
+import { getBlindRetryUrl } from "../lib/retryMode";
 import "./ReviewPage.css";
 
 export default function ReviewPage() {
@@ -289,7 +290,7 @@ export default function ReviewPage() {
                       <div className="reflection-entry-meta">
                         <span>Confidence <strong>{reflection.confidence}/5</strong></span>
                         <span>{reflection.reviewCount ? `Reviewed ${reflection.reviewCount} ${reflection.reviewCount === 1 ? "time" : "times"}` : "First review"}</span>
-                        {reflection.problemId && <Link className="review-retry-button" to={`/problems/${reflection.problemId}`}>Retry problem <span aria-hidden="true">→</span></Link>}
+                        {reflection.problemId && <Link className="review-retry-button" to={getBlindRetryUrl(reflection.problemId)}>Blind retry <span aria-hidden="true">→</span></Link>}
                         {due && (
                           <details className="review-snooze">
                             <summary>Snooze</summary>
