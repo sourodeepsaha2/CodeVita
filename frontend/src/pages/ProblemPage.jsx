@@ -101,6 +101,7 @@ function ProblemPractice({ id, search }) {
 
   return <main className="practice-page">
     <Link className="practice-back" to="/problems">← All problems</Link>
+    {blindRetry && <aside className="blind-retry-banner" role="status"><div><strong>Blind retry</strong><p>Past attempts are hidden while you solve from memory. They’ll appear after this submission.</p></div><Link to={`/problems/${id}`}>Exit retry mode</Link></aside>}
     <header className="practice-title"><div><p className="review-eyebrow">{problem.tags} · {problem.difficulty}</p><h1>{problem.title}</h1></div></header>
     <div className="practice-layout">
       <section className="practice-statement">
