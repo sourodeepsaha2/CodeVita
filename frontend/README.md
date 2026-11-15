@@ -10,4 +10,6 @@ The frontend connects to the Express API for account sessions, problem data, sub
 
 The Progress page turns that account's submission and reflection history into a six-week activity view, retry topic signals, due review count, and recent attempts.
 
+Use **Blind retry** on a linked reflection to reopen the problem with its earlier attempt history hidden. The history appears after the learner submits a fresh solution.
+
 See [the backend setup guide](../backend/README.md) for local services and the starter problem catalog.
