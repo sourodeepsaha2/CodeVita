@@ -1,16 +1,19 @@
-import { Link, useParams } from "react-router";
+import { Link, useLocation, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { apiRequest } from "../lib/api";
 import { createReflection } from "../lib/reflectionJournal";
 import { createRemoteReflection } from "../lib/reflectionApi";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
+import { getBlindRetryUrl, isBlindRetry } from "../lib/retryMode";
 
 export default function ProblemPage() {
   const { id } = useParams();
-  return <ProblemPractice key={id} id={id} />;
+  const { search } = useLocation();
+  return <ProblemPractice key={`${id}${search}`} id={id} search={search} />;
 }
 
-function ProblemPractice({ id }) {
+function ProblemPractice({ id, search }) {
+  const blindRetry = isBlindRetry(search);
   const [problem, setProblem] = useState(null);
   const [code, setCode] = useState("");
   const [language, setLanguage] = useState("javascript");
