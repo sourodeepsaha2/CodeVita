@@ -127,8 +127,8 @@ function ProblemPractice({ id, search }) {
           <span>{result.testCasesPassed}/{result.testCasesTotal} tests passed</span>
           {result.errorMessage && <pre>{result.errorMessage}</pre>}
         </section>}
-        {submissionHistory.length > 0 && <section className="submission-history" aria-label="Saved submissions">
-          <h2>Recent attempts</h2>
+        {submissionHistory.length > 0 && (!blindRetry || result !== null) && <section className="submission-history" aria-label="Saved submissions">
+          <div className="submission-history-heading"><h2>Recent attempts</h2>{!blindRetry && <Link to={getBlindRetryUrl(id)}>Try without attempt history →</Link>}</div>
           {submissionHistory.slice(0, 5).map((attempt) => <article className="submission-history-row" key={attempt._id}>
             <strong className={`history-status result-${attempt.status}`}>{attempt.status}</strong>
             <span>{attempt.testCasesPassed}/{attempt.testCasesTotal} tests</span>
