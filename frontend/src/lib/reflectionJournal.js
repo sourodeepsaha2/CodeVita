@@ -93,6 +93,7 @@ export function parseReflectionBackup(contents) {
       (item.isFavorite === undefined || typeof item.isFavorite === "boolean") &&
       (item.problemId === undefined || typeof item.problemId === "string") &&
       (item.submissionId === undefined || typeof item.submissionId === "string") &&
+      (item.outcome === undefined || ["practice", "struggle", "breakthrough"].includes(item.outcome)) &&
       (item.lastReviewedAt === undefined || validDate(item.lastReviewedAt));
   });
 
