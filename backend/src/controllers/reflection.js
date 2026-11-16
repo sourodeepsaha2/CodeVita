@@ -145,9 +145,16 @@ const importReflections = async (req, res) => {
             if (reflection.problemId && !existingProblemIds.has(String(reflection.problemId))) reflection.problemId = null;
         }
         const referencedSubmissionIds = [...new Set(prepared.map((reflection) => reflection.submissionId).filter(Boolean).map(String))];
-        const ownedSubmissionIds = new Set((await Submission.find({ _id: { $in: referencedSubmissionIds }, userId: req.result._id, status: { $in: ['wrong', 'error'] } }).distinct('_id')).map(String));
+        const ownedSubmissions = await Submission.find({ _id: { $in: referencedSubmissionIds }, userId: req.result._id, status: { $in: ['wrong', 'error', 'accepted'] } }).select('_id status problemId').lean();
+        const submissionsById = new Map(ownedSubmissions.map((submission) => [String(submission._id), submission]));
         for (const reflection of prepared) {
-            if (reflection.submissionId && !ownedSubmissionIds.has(String(reflection.submissionId))) reflection.submissionId = null;
+            if (!reflection.submissionId) continue;
+            const submission = submissionsById.get(String(reflection.submissionId));
+            if (!submission || (reflection.problemId && String(reflection.problemId) !== String(submission.problemId))) {
+                reflection.submissionId = null;
+                continue;
+            }
+            reflection.outcome = submission.status === 'accepted' ? 'breakthrough' : 'struggle';
         }
 
         const operations = prepared.map((reflection) => ({
