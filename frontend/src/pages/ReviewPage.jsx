@@ -239,9 +239,9 @@ export default function ReviewPage() {
               <input type="search" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="Search problems and notes" />
             </label>
             <div className="review-filters" role="group" aria-label="Filter review queue">
-              {[{ id: "all", label: "All" }, { id: "due", label: "Due" }, { id: "upcoming", label: "Upcoming" }, { id: "saved", label: "Saved" }].map((filter) => (
+              {[{ id: "all", label: "All" }, { id: "due", label: "Due" }, { id: "upcoming", label: "Upcoming" }, { id: "saved", label: "Saved" }, { id: "breakthrough", label: "Breakthroughs" }, { id: "struggle", label: "Retry notes" }].map((filter) => (
                 <button key={filter.id} type="button" className={queueFilter === filter.id ? "is-active" : ""} aria-pressed={queueFilter === filter.id} onClick={() => setQueueFilter(filter.id)}>
-                  {filter.label}{filter.id === "due" && <span>{dueCount}</span>}{filter.id === "saved" && <span>{reflections.filter((item) => item.isFavorite).length}</span>}
+                  {filter.label}{filter.id === "due" && <span>{dueCount}</span>}{filter.id === "saved" && <span>{reflections.filter((item) => item.isFavorite).length}</span>}{filter.id === "breakthrough" && <span>{reflections.filter((item) => item.outcome === "breakthrough").length}</span>}{filter.id === "struggle" && <span>{reflections.filter((item) => item.outcome === "struggle").length}</span>}
                 </button>
               ))}
             </div>
