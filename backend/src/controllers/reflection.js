@@ -54,13 +54,16 @@ const createReflection = async (req, res) => {
         }
 
         let submissionId = null;
+        let outcome = 'practice';
         if (input.submissionId) {
             if (!validId(input.submissionId)) return res.status(400).json({ error: 'Invalid submission reference.' });
-            const submission = await Submission.findOne({ _id: input.submissionId, userId: req.result._id }).select('_id status');
-            if (!submission || !['wrong', 'error'].includes(submission.status)) {
-                return res.status(400).json({ error: 'Reflections can only be linked to your own failed attempt.' });
+            const submission = await Submission.findOne({ _id: input.submissionId, userId: req.result._id }).select('_id status problemId');
+            if (!submission || !['wrong', 'error', 'accepted'].includes(submission.status)) {
+                return res.status(400).json({ error: 'Reflections can only be linked to your own completed attempt.' });
             }
+            if (problemId && String(submission.problemId) !== String(problemId)) return res.status(400).json({ error: 'The linked attempt belongs to a different problem.' });
             submissionId = submission._id;
+            outcome = submission.status === 'accepted' ? 'breakthrough' : 'struggle';
         }
 
         const clientId = typeof input.clientId === 'string' && input.clientId.trim().length > 0 && input.clientId.trim().length <= 80
