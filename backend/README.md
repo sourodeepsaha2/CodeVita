@@ -15,3 +15,5 @@ Set `ADMIN_EMAIL`, `ADMIN_PASSWORD` (at least 12 characters), and optionally `AD
 The seed script does not need Redis or Judge0 credentials. Code execution requires `RAPIDAPI_KEY` at runtime. Journal entries, review dates, and snooze state are stored per account in MongoDB through the authenticated `/journal/reflections` API.
 
 The authenticated `GET /progress` endpoint summarizes a learner's submissions, six-week activity, due journal reflections, recent attempts, and topics with the most failed attempts.
+
+Reflections distinguish manual practice notes, struggle notes linked to failed attempts, and breakthrough notes linked to accepted attempts. Progress summaries include the learner's breakthrough count.

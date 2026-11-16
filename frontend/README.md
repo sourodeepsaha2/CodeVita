@@ -12,4 +12,6 @@ The Progress page turns that account's submission and reflection history into a 
 
 Use **Blind retry** on a linked reflection to reopen the problem with its earlier attempt history hidden. The history appears after the learner submits a fresh solution.
 
+After any completed judge run, learners can capture a reflection. Accepted runs prompt for the idea that worked; failed runs prompt for the approach and blocker. The journal labels and filters breakthroughs separately from retry notes.
+
 See [the backend setup guide](../backend/README.md) for local services and the starter problem catalog.
