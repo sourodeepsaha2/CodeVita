@@ -288,6 +288,7 @@ export default function ReviewPage() {
                         </div>
                       </div>
                       <div className="reflection-entry-notes">
+                        <span className={`reflection-outcome-pill outcome-${reflection.outcome || "practice"}`}>{reflection.outcome === "breakthrough" ? "Breakthrough" : reflection.outcome === "struggle" ? "Retry note" : "Practice note"}</span>
                         <div><span>APPROACH</span><p>{reflection.approach}</p></div>
                         {reflection.blocker && <div><span>STUCK ON</span><p>{reflection.blocker}</p></div>}
                       </div>
