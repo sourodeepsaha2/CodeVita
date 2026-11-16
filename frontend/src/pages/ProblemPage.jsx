@@ -69,10 +69,8 @@ function ProblemPractice({ id, search }) {
       setResult(submission);
       const history = await apiRequest(`/problem/submittedProblem/${id}`).catch(() => null);
       if (history) setSubmissionHistory(history.submissions || []);
-      if (submission.status !== "accepted") {
-        setReflectionClientId(globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`);
-        setShowReflection(true);
-      }
+      setReflectionClientId(globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`);
+      setShowReflection(true);
     } catch (requestError) {
       setError(requestError.message);
     } finally {
