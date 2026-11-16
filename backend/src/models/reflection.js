@@ -9,6 +9,7 @@ const reflectionSchema = new Schema({
     problem: { type: String, required: true, trim: true, minlength: 1, maxlength: 160 },
     approach: { type: String, required: true, trim: true, minlength: 1, maxlength: 4000 },
     blocker: { type: String, default: '', trim: true, maxlength: 2000 },
+    outcome: { type: String, enum: ['practice', 'struggle', 'breakthrough'], default: 'practice', index: true },
     confidence: { type: Number, required: true, min: 1, max: 5 },
     nextReviewAt: { type: Date, required: true, index: true },
     reviewCount: { type: Number, default: 0, min: 0 },
