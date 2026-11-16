@@ -8,11 +8,13 @@ import "./ReviewPage.css";
 
 export default function ReviewPage() {
   useDocumentTitle("Reflection Journal");
+  const [searchParams] = useSearchParams();
+  const initialFilter = ["breakthrough", "struggle"].includes(searchParams.get("filter")) ? searchParams.get("filter") : "all";
   const [reflections, setReflections] = useState([]);
   const [pageLoading, setPageLoading] = useState(true);
   const [journalError, setJournalError] = useState("");
   const [mutationError, setMutationError] = useState("");
-  const [queueFilter, setQueueFilter] = useState("all");
+  const [queueFilter, setQueueFilter] = useState(initialFilter);
   const [searchQuery, setSearchQuery] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [backupMessage, setBackupMessage] = useState("");
