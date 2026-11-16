@@ -140,11 +140,11 @@ function ProblemPractice({ id, search }) {
       </form>
     </div>
     {showReflection && <div className="reflection-backdrop" role="presentation"><form className="reflection-dialog" onSubmit={saveAttemptReflection} role="dialog" aria-modal="true" aria-labelledby="reflection-heading">
-      <p className="review-eyebrow">MAKE THE ATTEMPT COUNT</p><h2 id="reflection-heading">What will you remember?</h2>
-      <p>Your run didn’t pass all tests. Capture the idea and the snag while it’s fresh.</p>
-      <label htmlFor="reflection-approach">What was your approach? <span aria-hidden="true">*</span></label>
+      <p className="review-eyebrow">MAKE THE ATTEMPT COUNT</p><h2 id="reflection-heading">{result?.status === "accepted" ? "Capture the breakthrough" : "What will you remember?"}</h2>
+      <p>{result?.status === "accepted" ? "Write down the key idea that made it work so you can reuse it later." : "Your run didn’t pass all tests. Capture the idea and the snag while it’s fresh."}</p>
+      <label htmlFor="reflection-approach">{result?.status === "accepted" ? "What idea or pattern made it work?" : "What was your approach?"} <span aria-hidden="true">*</span></label>
       <textarea id="reflection-approach" required value={approach} onChange={(event) => setApproach(event.target.value)} rows={3} />
-      <label htmlFor="reflection-blocker">Where did you get stuck?</label>
+      <label htmlFor="reflection-blocker">{result?.status === "accepted" ? "What would you improve next time?" : "Where did you get stuck?"}</label>
       <textarea id="reflection-blocker" value={blocker} onChange={(event) => setBlocker(event.target.value)} rows={2} />
       <label htmlFor="reflection-confidence">How confident are you? (1–5)</label>
       <select id="reflection-confidence" value={confidence} onChange={(event) => setConfidence(event.target.value)}>{[1, 2, 3, 4, 5].map((score) => <option key={score}>{score}</option>)}</select>
