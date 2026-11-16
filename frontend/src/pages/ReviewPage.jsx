@@ -183,6 +183,8 @@ export default function ReviewPage() {
     .filter((reflection) => {
       if (queueFilter === "all") return true;
       if (queueFilter === "saved") return Boolean(reflection.isFavorite);
+      if (queueFilter === "breakthrough") return reflection.outcome === "breakthrough";
+      if (queueFilter === "struggle") return reflection.outcome === "struggle";
       const due = new Date(reflection.nextReviewAt) <= now;
       return queueFilter === "due" ? due : !due;
     })
