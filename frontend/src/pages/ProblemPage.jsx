@@ -83,10 +83,11 @@ function ProblemPractice({ id, search }) {
     if (!approach.trim()) return;
     setSavingReflection(true);
     try {
-      const reflection = createReflection({ id: reflectionClientId, problem: problem.title, problemId: id, submissionId: result?.id, approach, blocker, confidence });
+      const outcome = result?.status === "accepted" ? "breakthrough" : "struggle";
+      const reflection = createReflection({ id: reflectionClientId, problem: problem.title, problemId: id, submissionId: result?.id, approach, blocker, confidence, outcome });
       await createRemoteReflection(reflection);
       setShowReflection(false);
-      setReflectionMessage("Reflection saved to your account journal. It’s now in your review queue.");
+      setReflectionMessage(`${outcome === "breakthrough" ? "Breakthrough" : "Retry note"} saved to your account journal and review queue.`);
     } catch (requestError) {
       setReflectionMessage(requestError.message || "Couldn’t save this reflection. Try again.");
     } finally {
