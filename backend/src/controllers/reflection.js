@@ -120,12 +120,14 @@ const importReflections = async (req, res) => {
             const dueDate = validDate(input.nextReviewAt) ? new Date(input.nextReviewAt) : nextReviewAt(confidence, createdAt);
             const lastReviewedAt = validDate(input.lastReviewedAt) ? new Date(input.lastReviewedAt) : null;
             const reviewCount = Number.isInteger(Number(input.reviewCount)) && Number(input.reviewCount) >= 0 ? Number(input.reviewCount) : 0;
+            const outcome = ['practice', 'struggle', 'breakthrough'].includes(input.outcome) ? input.outcome : 'practice';
             prepared.push({
                 userId: req.result._id,
                 clientId,
                 problem,
                 approach,
                 blocker,
+                outcome,
                 confidence,
                 createdAt,
                 nextReviewAt: dueDate,
