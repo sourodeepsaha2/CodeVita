@@ -80,6 +80,7 @@ const createReflection = async (req, res) => {
             problem,
             approach,
             blocker,
+            outcome,
             confidence,
             nextReviewAt: nextReviewAt(confidence),
         });
