@@ -326,6 +326,10 @@ export default function ReviewPage() {
               ? `No journal entries match “${searchQuery.trim()}” in this view.`
               : queueFilter === "saved"
                 ? "No saved reflections yet. Use the star on a reflection to keep it here."
+                : queueFilter === "breakthrough"
+                  ? "No breakthroughs noted yet. Capture the idea after your next accepted solution."
+                  : queueFilter === "struggle"
+                    ? "No retry notes yet. Reflections from failed attempts will appear here."
                 : `No ${queueFilter === "due" ? "reviews are due" : "upcoming reviews"} in this view.`}
           </div>
         )}
