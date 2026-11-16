@@ -13,6 +13,7 @@ const serialize = (reflection) => ({
     problem: reflection.problem,
     approach: reflection.approach,
     blocker: reflection.blocker || '',
+    outcome: reflection.outcome || 'practice',
     confidence: reflection.confidence,
     nextReviewAt: reflection.nextReviewAt,
     reviewCount: reflection.reviewCount,
