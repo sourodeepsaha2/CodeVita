@@ -104,7 +104,7 @@ export function parseReflectionBackup(contents) {
   return backup.reflections;
 }
 
-export function createReflection({ id, problem, problemId, submissionId, approach, blocker, confidence }) {
+export function createReflection({ id, problem, problemId, submissionId, approach, blocker, confidence, outcome = "practice" }) {
   return {
     id: id || globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`,
     problem: problem.trim(),
@@ -112,6 +112,7 @@ export function createReflection({ id, problem, problemId, submissionId, approac
     ...(typeof submissionId === "string" && submissionId ? { submissionId } : {}),
     approach: approach.trim(),
     blocker: blocker.trim(),
+    outcome: ["practice", "struggle", "breakthrough"].includes(outcome) ? outcome : "practice",
     confidence: Number(confidence),
     createdAt: new Date().toISOString(),
     nextReviewAt: getNextReviewAt(confidence),
