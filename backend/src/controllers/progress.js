@@ -10,7 +10,7 @@ const getProgress = async (req, res) => {
         weekStart.setUTCHours(0, 0, 0, 0);
         weekStart.setUTCDate(weekStart.getUTCDate() - 41);
 
-        const [totals, weekly, topics, recent, dueReflections] = await Promise.all([
+        const [totals, weekly, topics, recent, dueReflections, reflectionOutcomes] = await Promise.all([
             Submission.aggregate([
                 { $match: { userId } },
                 { $group: {
@@ -43,6 +43,10 @@ const getProgress = async (req, res) => {
                 .populate({ path: 'problemId', select: 'title tags difficulty' })
                 .sort({ createdAt: -1 }).limit(8).lean(),
             Reflection.countDocuments({ userId, nextReviewAt: { $lte: now } }),
+            Reflection.aggregate([
+                { $match: { userId } },
+                { $group: { _id: { $ifNull: ['$outcome', 'practice'] }, count: { $sum: 1 } } },
+            ]),
         ]);
 
         const days = Array.from({ length: 42 }, (_, index) => {
@@ -61,6 +65,8 @@ const getProgress = async (req, res) => {
                 ...summary,
                 acceptanceRate: summary.attempts ? Math.round((summary.accepted / summary.attempts) * 100) : 0,
                 dueReflections,
+                breakthroughs: reflectionOutcomes.find((entry) => entry._id === 'breakthrough')?.count || 0,
+                struggles: reflectionOutcomes.find((entry) => entry._id === 'struggle')?.count || 0,
             },
             activity: days,
             topics,
