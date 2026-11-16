@@ -7,6 +7,7 @@ const toPayload = (reflection) => ({
   problem: reflection.problem,
   approach: reflection.approach,
   blocker: reflection.blocker || "",
+  outcome: reflection.outcome || "practice",
   confidence: Number(reflection.confidence),
   nextReviewAt: reflection.nextReviewAt,
   reviewCount: Number(reflection.reviewCount) || 0,
