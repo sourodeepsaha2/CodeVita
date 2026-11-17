@@ -9,7 +9,7 @@ import "./ReviewPage.css";
 export default function ReviewPage() {
   useDocumentTitle("Reflection Journal");
   const [searchParams] = useSearchParams();
-  const initialFilter = ["breakthrough", "struggle"].includes(searchParams.get("filter")) ? searchParams.get("filter") : "all";
+  const initialFilter = ["due", "breakthrough", "struggle"].includes(searchParams.get("filter")) ? searchParams.get("filter") : "all";
   const [reflections, setReflections] = useState([]);
   const [pageLoading, setPageLoading] = useState(true);
   const [journalError, setJournalError] = useState("");
