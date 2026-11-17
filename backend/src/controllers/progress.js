@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const Submission = require('../models/submission');
 const Reflection = require('../models/reflection');
+const Problem = require('../models/problem');
+const User = require('../models/user');
+const buildNextSession = require('../utils/progressRecommendation');
 
 const getProgress = async (req, res) => {
     try {
@@ -10,7 +13,7 @@ const getProgress = async (req, res) => {
         weekStart.setUTCHours(0, 0, 0, 0);
         weekStart.setUTCDate(weekStart.getUTCDate() - 41);
 
-        const [totals, weekly, topics, recent, dueReflections, reflectionOutcomes] = await Promise.all([
+        const [totals, weekly, topics, recent, dueReflections, reflectionOutcomes, nextDueReflection, learner, problems] = await Promise.all([
             Submission.aggregate([
                 { $match: { userId } },
                 { $group: {
@@ -47,6 +50,10 @@ const getProgress = async (req, res) => {
                 { $match: { userId } },
                 { $group: { _id: { $ifNull: ['$outcome', 'practice'] }, count: { $sum: 1 } } },
             ]),
+            Reflection.findOne({ userId, nextReviewAt: { $lte: now } })
+                .select('problem problemId confidence nextReviewAt').sort({ nextReviewAt: 1 }).lean(),
+            User.findById(userId).select('problemSolved').lean(),
+            Problem.find().select('_id title tags difficulty').sort({ title: 1 }).lean(),
         ]);
 
         const days = Array.from({ length: 42 }, (_, index) => {
