@@ -83,6 +83,7 @@ const getProgress = async (req, res) => {
             },
             activity: days,
             topics,
+            nextSession,
             recent: recent.map((attempt) => ({
                 id: String(attempt._id),
                 problem: attempt.problemId?.title || 'Problem removed',
