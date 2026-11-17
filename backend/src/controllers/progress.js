@@ -67,6 +67,12 @@ const getProgress = async (req, res) => {
             if (entry) { entry.attempts = day.attempts; entry.accepted = day.accepted; }
         }
         const summary = totals[0] || { attempts: 0, accepted: 0, solved: 0 };
+        const nextSession = buildNextSession({
+            dueReflection: nextDueReflection,
+            topics,
+            problems,
+            solvedIds: learner?.problemSolved || [],
+        });
         return res.status(200).json({
             summary: {
                 ...summary,
