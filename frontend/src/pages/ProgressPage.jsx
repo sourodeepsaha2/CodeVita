@@ -24,6 +24,7 @@ export default function ProgressPage() {
 
   return <main className="progress-page">
     <header className="progress-header"><p className="review-eyebrow">YOUR LEARNING LOOP</p><h1>Progress, with context.</h1><p>See what’s clicking, what needs another pass, and where your effort is going.</p></header>
+    <NextSessionCard recommendation={data.nextSession} />
     <ProgressSummary summary={data.summary} />
     <ProgressActivity activity={data.activity} />
     <ProgressInsights topics={data.topics} recent={data.recent} />
