@@ -5,6 +5,7 @@ import { getLearningProgress } from '../lib/progressApi';
 import ProgressSummary from '../components/progress/ProgressSummary';
 import ProgressActivity from '../components/progress/ProgressActivity';
 import ProgressInsights from '../components/progress/ProgressInsights';
+import NextSessionCard from '../components/progress/NextSessionCard';
 import './ProgressPage.css';
 
 export default function ProgressPage() {
