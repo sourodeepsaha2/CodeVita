@@ -12,6 +12,7 @@ Target launch: November 18, 2026.
 - A learner can review private practice trends, recent attempts, and topics with repeated failed attempts.
 - From a reflection, a learner can retry without seeing past attempt history until submitting a fresh solution.
 - Accepted attempts can capture the idea behind a breakthrough alongside notes about failed attempts.
+- Progress recommendations prioritize due reflections, then repeated weak topics, then unsolved curated problems.
 
 The product's learning loop is mistake memory: a failed attempt informs what the learner reviews next. The existing reflection journal is the starting point for that experience.
 
