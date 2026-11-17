@@ -14,4 +14,6 @@ Use **Blind retry** on a linked reflection to reopen the problem with its earlie
 
 After any completed judge run, learners can capture a reflection. Accepted runs prompt for the idea that worked; failed runs prompt for the approach and blocker. The journal labels and filters breakthroughs separately from retry notes.
 
+The Progress page recommends a next session from due journal entries and repeated struggle topics, with a curated problem fallback when there is nothing to review.
+
 See [the backend setup guide](../backend/README.md) for local services and the starter problem catalog.
