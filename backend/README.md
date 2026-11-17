@@ -17,3 +17,5 @@ The seed script does not need Redis or Judge0 credentials. Code execution requir
 The authenticated `GET /progress` endpoint summarizes a learner's submissions, six-week activity, due journal reflections, recent attempts, and topics with the most failed attempts.
 
 Reflections distinguish manual practice notes, struggle notes linked to failed attempts, and breakthrough notes linked to accepted attempts. Progress summaries include the learner's breakthrough count.
+
+The progress response also includes a next-session recommendation. It prioritizes the oldest due reflection, then a weak topic with an unsolved matching problem, and finally the next available curated problem.
